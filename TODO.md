@@ -17,6 +17,7 @@
                 - model_bedload
                 - model_turbulence
 
+- [_] use OBSpy to import examplary dataset and convert to appropriate data format
 - [_] Check on python coding standards PEP8
 - [_] Add assertion to check on certain conditions
 - [_] Check each single function, unit testing
