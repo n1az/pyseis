@@ -1,57 +1,96 @@
-# Pyseis
+<h1 align="center">Pyseis</h1>
 
-## Description
+<p align="center">
+  <img alt="Github top language" src="https://img.shields.io/gitlab/languages/top/tautz1/pyseis?color=56BEB8">
 
+  <img alt="Github language count" src="https://img.shields.io/gitlab/languages/count/tautz1/pyseis?color=56BEB8">
 
-## Collaborate with your team
+  <img alt="Repository size" src="https://img.shields.io/gitlab/repo-size/tautz1/pyseis?color=56BEB8">
 
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+  <img alt="License" src="https://img.shields.io/gitlab/license/tautz1/pyseis?color=56BEB8">
 
-## Test and Deploy
+  <img alt="Github issues" src="https://img.shields.io/gitlab/issues/tautz1/pyseis?color=56BEB8" />
 
-Use the built-in continuous integration in GitLab.
+  <!-- <img alt="Github forks" src="https://img.shields.io/github/forks/{{YOUR_GITHUB_USERNAME}}/pyseis?color=56BEB8" /> -->
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+  <!-- <img alt="Github stars" src="https://img.shields.io/github/stars/{{YOUR_GITHUB_USERNAME}}/pyseis?color=56BEB8" /> -->
+</p>
 
-***
+<!-- Status -->
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+<h4 align="center"> 
+	🚧  Pyseis 🚀 Under construction...  🚧
+</h4> 
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+<hr>
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+<p align="center">
+  <a href="#dart-project-overview">Overview</a> &#xa0; | &#xa0; 
+  <a href="#sparkles-features">Features</a> &#xa0; | &#xa0;
+  <a href="#rocket-technologies">Technologies</a> &#xa0; | &#xa0;
+  <a href="#white_check_mark-requirements">Requirements</a> &#xa0; | &#xa0;
+  <a href="#checkered_flag-starting">Starting</a> &#xa0; | &#xa0;
+  <a href="#memo-license">License</a> &#xa0; | &#xa0;
+  <a href="#black_nib-citation">Citation</a> &#xa0; | &#xa0;
+</p>
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+<br>
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+# :dart: Project Overview #
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+Environmental seismology is a scientific field that studies the
+seismic signals, emitted by Earth surface processes. This package
+provides all relevant functions to read/write seismic data files, prepare,
+analyse and visualise seismic data, and generate reports of the processing
+history.
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+## :sparkles: Features ##
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+:heavy_check_mark: Signal Processing;\
+:heavy_check_mark: Signal Analysis;\
+:heavy_check_mark: Visualization;
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+## :rocket: Technologies ##
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+The following tools were used in this project:
 
-## License
-For open source projects, say how it is licensed.
+- [Python](https://www.python.org)
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+## :white_check_mark: Requirements ##
+
+Before starting :checkered_flag:, you need to have [Git](https://git-scm.com) and [Python](https://www.python.org) installed.
+
+## :checkered_flag: Starting ##
+
+```bash
+# Clone this project
+$ git clone https://github.com/{{YOUR_GITHUB_USERNAME}}/pyseis
+
+# Access
+$ cd pyseis
+
+# Install dependencies
+$ pip install -r requirements.txt
+
+# Run the project
+$ python pyseis.py
+
+```
+
+## :memo: License ##
+
+This project is under license from MIT. For more details, see the [LICENSE](LICENSE) file.
+
+## :black_nib: Citation ##
+
+If you use this software, please cite it using [this](CITATION.cff) file.
+
+## :memo: Code of Conduct & Contribution Guidelines ##
+
+To find out about Code of Conduct, please see [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](CONDUCT.md)
+
+Please check [here](CONTRIBUTING.md) to know the contribution guidelines.
+
+&#xa0;
+
+<a href="#top">Back to top</a>
