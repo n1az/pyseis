@@ -79,7 +79,7 @@ $ python pyseis.py
 
 ## :memo: License ##
 
-This project is under license from MIT. For more details, see the [LICENSE](LICENSE.md) file.
+This project is under license from MIT. For more details, see the [LICENSE](LICENSE) file.
 
 ## :black_nib: Citation ##
 
