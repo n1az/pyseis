@@ -85,11 +85,9 @@ This project is under license from MIT. For more details, see the [LICENSE](LICE
 
 If you use this software, please cite it using [this](CITATION.cff) file.
 
-## :memo: Code of Conduct ##
+## :memo: Code of Conduct & Contribution Guidelines ##
 
-To find out about Code of Conduct, please see [here](CONDUCT.md).
-
-## :memo: Contribution Guidelines ##
+To find out about Code of Conduct, please see [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](CONDUCT.md)
 
 Please check [here](CONTRIBUTING.md) to know the contribution guidelines.
 
