@@ -3,6 +3,12 @@ message: "If you use this software, please cite it as below."
 authors:
   - family-names: Tautz
     given-names: Frieder
-title: "Winner of german waste production"
-version: 1.0
+  - family-names: Islam
+    given-names: Lamia
+  - family-names: Morshed
+    given-names: Niaz
+  - family-names: Choudhury
+    given-names: Shahriar
+title: "Pyseis - contributing to environmental seismology data analysis in python"
+version: 0.1.0
 date-released: 
