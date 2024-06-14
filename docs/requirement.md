@@ -1,121 +1,68 @@
-# Seismology Data Analysis and Visualization Package
+# Pyseis
 ## Abstract Workflow
-The package will provide a streamlined workflow for seismology data analysis and visualization.
+The package will provide a streamlined workflow for seismology data analysis and modelling.
 ## Activity Diagram
 ```mermaid
 graph TD
-    A[Start] --> B[Data Acquisition]
-    B --> C[Data Preprocessing]
-    C --> D[Data Analysis]
-    D --> E[Data Visualization]
-    E --> F[Reporting]
-    F --> G[End]
+    A[(Start)] --> B[Model Creation]
+    B -->|Quality Check| C[Data Inversion]
+    B -->|Refine Model| B
+    C --> D[Seismic Distance Calculation]
+    D --> E[Seismic Signal Migration]
+    E --> F[Seismic Event Localization]
+    F --> G[Spatial Data Processing]
+    G --> H[Coordinate System Conversion]
+    H --> I[Source Location Determination]
+    I --> J[Seismic Source Tracking]
+    J --> K[Modelling]
+    K --> L[(End)]
 ```
+### Functional Requirements
+1. **Model Creation**: This is the first step where we create reference models using the methods: ***fmi_parameters*** and ***fmi_spectra***.
+2. **Data Inversion**: Here, we invert fluvial data sets based on the reference spectra catalogue created in the previous step using the method: ***fmi_inversion***.
+3. **Seismic Distance Calculation**: In this step, we calculate the topography-corrected distances for seismic waves using the method: ***spatial_distance***.
+4. **Seismic Signal Migration**: Now, we migrate the seismic signals through a grid of locations using the method: ***spatial_migrate***.
+5. **Seismic Event Localization**: At this stage, we locate the source of a seismic event by modelling amplitude attenuation using the method: ***spatial_amplitude***.
+6. **Spatial Data Processing**: Here, we process the spatial data by clipping values and normalizing them if necessary using the method: ***spatial_clip***.
+7. **Coordinate System Conversion**: In this step, we convert the coordinates between different reference systems using the method: ***spatial_convert***.
+8. **Source Location Determination**: Now, we determine the most likely source location(s) based on the processed data using the method: ***spatial_pmax***.
+9. **Seismic Source Tracking**: At this stage, we track a spatially mobile seismic source using the method: ***spatial_track***.
+10. **Modelling**: Finally, we model the seismic spectrum due to bedload transport in rivers and hydraulic turbulence using the methods: ***model_bedload*** and ***model_turbulence***.
 ## Component Analysis
+| Abstract Workflow Node | Operation | Input(s) | Output(s) | Implementation |
+| --- | --- | --- | --- | --- |
+| **Model Creation** | | | | | |
+| fmi_inversion | Invert fluvial data set based on reference spectra catalogue |  |  |  |
+| fmi_parameters | Create reference model reference parameter catalogue |  |  |  |
+| **Data Inversion** | | | | | |
+| fmi_spectra | Create reference model spectra catalogue |  |  |  |
+| **Seismic Distance Calculation** | | | | | |
+| spatial_distance | Calculate topography-corrected distances for seismic waves | stations: Numeric matrix of length two, x- and y-coordinates of the seismic stations <br> dem: SpatRaster object, the digital elevation model (DEM) to be processed <br> topography: Logical scalar, option to enable topography correction <br> maps: Logical scalar, option to enable/disable calculation of distance maps <br> matrix: Logical scalar, option to enable/disable calculation of interstation distances <br> aoi: Numeric vector of length four, bounding coordinates of the area of interest <br> verbose: Logical value, option to show extended function information | List object with distance maps (list of SpatRaster objects from terra package) and station distance matrix (data.frame) | Niaz |
+| **Seismic Signal Migration** | | | | | |
+| spatial_migrate | Migrate signals of a seismic event through a grid of locations | data: Numeric matrix or eseis object, seismic signals to cross-correlate <br> d_stations: Numeric matrix, inter-station distances. Output of spatial_distance <br> d_map: List object, distance maps for each station. Output of spatial_distance <br> snr: Numeric vector, optional signal-to-noise-ratios for each signal trace, used for normalisation <br> v: Numeric value, mean velocity of seismic waves (m/s) <br> dt: Numeric value, sampling period <br> normalise: Logical value, option to normalise stations correlations by signal-to-noise-ratios <br> verbose: Logical value, option to show extended function information | SpatialGridDataFrame-object with Gaussian probability density function values for each grid cell | Niaz |
+| **Seismic Event Localization** | | | | | |
+| spatial_amplitude | Locate the source of a seismic event by modelling amplitude attenuation | data: Numeric matrix or eseis object, seismic signals to work with <br> coupling: Numeric vector, coupling efficiency factors for each seismic station <br> d_map: List object, distance maps for each station. Output of spatial_distance <br> aoi: raster object that defines which pixels are used to locate the source <br> v: Numeric value, mean velocity of seismic waves (m/s) <br> q: Numeric value, quality factor of the ground <br> f: Numeric value, frequency for which to model the attenuation <br> a_0: Logical value, start parameter of the source amplitude <br> normalise: Logical value, option to normalise sum of residuals between 0 and 1 <br> output: Character value, type of metric the function returns <br> cpu: Numeric value, fraction of CPUs to use |  Raster object with the location output metrics for each grid cell | Niaz |
+| **Spatial Data Processing** | | | | | |
+| spatial_clip | Clip values of spatial data | data: SpatRaster object, spatial data set to be processed <br> quantile: Numeric value, quantile value below which raster values are clipped <br> replace: Numeric value, replacement value <br> normalise: Logical value, optionally normalise values above threshold quantile between 0 and 1 | SpatRaster object, data set with clipped values | Lamia |
+| **Coordinate System Conversion** | | | | | |
+| spatial_convert | Convert coordinates between reference systems | data: Numeric vector of length two or data frame, x-, y-coordinates to be converted <br> from: Character value, proj4 string of the input reference system <br> to: Character value, proj4 string of the output reference system | Numeric data frame with converted coordinates | Lamia |
+| **Source Location Determination** | | | | | |
+| spatial_pmax | Get most likely source location | data: SpatRaster object, spatial data set with source location estimates | data.frame, coordinates (x and y) of the most likely source location(s) | Lamia |
+| **Seismic Source Tracking** | | | | | |
+| spatial_track | Track a spatially mobile seismic source |  |  |  |
+| **Modelling** | | | | | |
+| model_bedload | Model the seismic spectrum due to bedload transport in rivers |  |  |  |
+| model_turbulence | Model the seismic spectrum due to hydraulic turbulence |  |  |  |
 
-| Abstract Workflow Node   | Operation                                                               | Input(s)                                                                                                                                                                                                                     | Output(s)                                                                                                               | Implementation   |
-|:-------------------------|:------------------------------------------------------------------------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:------------------------------------------------------------------------------------------------------------------------|:-----------------|
-| fmi_inversion            | Invert fluvial data set based on reference spectra catalogue            | nan                                                                                                                                                                                                                          | nan                                                                                                                     | …                |
-| fmi_parameters           | Create reference model reference parameter catalogue                    | nan                                                                                                                                                                                                                          | nan                                                                                                                     | nan              |
-| fmi_spectra              | Create reference model spectra catalogue                                | nan                                                                                                                                                                                                                          | nan                                                                                                                     | nan              |
-| spatial_distance         | Calculate topography-corrected distances for seismic waves              | stations Numeric matrix of length two, x- and y-coordinates of the seismic stations                                                                                                                                          | List object with distance maps (list of SpatRaster objects from terra package) and station distance matrix (data.frame) | Niaz             |
-|                          |                                                                         | dem SpatRaster object, the digital elevation model (DEM) to be processed.                                                                                                                                                    |                                                                                                                         |                  |
-|                          |                                                                         | topography Logical scalar, option to enable topography correction                                                                                                                                                            |                                                                                                                         |                  |
-|                          |                                                                         | maps Logical scalar, option to enable/disable calculation of distance maps.                                                                                                                                                  |                                                                                                                         |                  |
-|                          |                                                                         | matrix Logical scalar, option to enable/disable calculation of interstation distances.                                                                                                                                       |                                                                                                                         |                  |
-|                          |                                                                         | aoi Numeric vector of length four, bounding coordinates of the area of interest.                                                                                                                                             |                                                                                                                         |                  |
-|                          |                                                                         | verbose Logical value, option to show extended function information                                                                                                                                                          |                                                                                                                         |                  |
-| spatial_migrate          | Migrate signals of a seismic event through a grid of locations          | data Numeric matrix or eseis object, seismic signals to cross-correlate.                                                                                                                                                     | A SpatialGridDataFrame-object with Gaussian probability density function values for each grid cell                      | Niaz             |
-|                          |                                                                         | d_stations Numeric matrix, inter-station distances. Output of spatial_distance.                                                                                                                                              |                                                                                                                         |                  |
-|                          |                                                                         | d_map List object, distance maps for each station. Output of spatial_distance.                                                                                                                                               |                                                                                                                         |                  |
-|                          |                                                                         | snr Numeric vector, optional signal-to-noise-ratios for each signal trace, used for                                                                                                                                          |                                                                                                                         |                  |
-|                          |                                                                         | normalisation.                                                                                                                                                                                                               |                                                                                                                         |                  |
-|                          |                                                                         | v Numeric value, mean velocity of seismic waves (m/s).                                                                                                                                                                       |                                                                                                                         |                  |
-|                          |                                                                         | dt Numeric value, sampling period.                                                                                                                                                                                           |                                                                                                                         |                  |
-|                          |                                                                         | normalise Logical value, option to normalise stations correlations by signal-to-noise-ratios.                                                            verbose Logical value, option to show extended function information |                                                                                                                         |                  |
-| spatial_ amplitude       | Locate the source of a seismic event by modelling amplutide attenuation | data Numeric matrix or eseis object, seismic signals to work with.                                                                                                                                                           | A raster object with the location output metrics for each grid cell                                                     | Niaz             |
-|                          |                                                                         | coupling Numeric vector, coupling efficiency factors for each seismic station                                                                                                                                                |                                                                                                                         |                  |
-|                          |                                                                         | d_map List object, distance maps for each station.  Output of spatial_distance.                                                                                                                                              |                                                                                                                         |                  |
-|                          |                                                                         | aoi raster object that defines which pixels are used to locate the source                                                                                                                                                    |                                                                                                                         |                  |
-|                          |                                                                         | v Numeric value, mean velocity of seismic waves (m/s).                                                                                                                                                                       |                                                                                                                         |                  |
-|                          |                                                                         | q Numeric value, quality factor of the ground.                                                                                                                                                                               |                                                                                                                         |                  |
-|                          |                                                                         | f Numeric value, frequency for which to model the attenuation.                                                                                                                                                               |                                                                                                                         |                  |
-|                          |                                                                         | a_0 Logical value, start parameter of the source amplitude,                                                                                                                                                                  |                                                                                                                         |                  |
-|                          |                                                                         | normalise Logical value, option to normalise sum of residuals between 0 and 1,                                                                                                                                               |                                                                                                                         |                  |
-|                          |                                                                         | output Character value, type of metric the function returns.,                                                                                                                                                                |                                                                                                                         |                  |
-|                          |                                                                         | cpu Numeric value, fraction of CPUs to use.                                                                                                                                                                                  |                                                                                                                         |                  |
-| spatial_clip             | Clip values of spatial data                                             | data SpatRaster object, spatial data set to be processed.                                                                                                                                                                    | SpatRaster object, data set with clipped values                                                                         | Lamia            |
-|                          |                                                                         | quantile Numeric value, quantile value below which raster values are clipped.                                                                                                                                                |                                                                                                                         |                  |
-|                          |                                                                         | replace Numeric value, replacement value.                                                                                                                                                                                    |                                                                                                                         |                  |
-|                          |                                                                         | normalise Logical value, optionally normalise values above threshold quantile between 0 and 1.                                                                                                                               |                                                                                                                         |                  |
-| spatial_convert          | Convert coordinates between reference systems                           | data Numeric vector of length two or data frame, x-, y-coordinates to be converted.                                                                                                                                          | Numeric data frame with converted coordinates                                                                           | Lamia            |
-|                          |                                                                         | from Character value, proj4 string of the input reference system.                                                                                                                                                            |                                                                                                                         |                  |
-|                          |                                                                         | to Character value, proj4 string of the output reference system.                                                                                                                                                             |                                                                                                                         |                  |
-| spatial_pmax             | Get most likely source location                                         | data SpatRaster object, spatial data set with source location estimates.                                                                                                                                                     | data.frame, coordinates (x and y) of the most likely s ource location(s).                                               | Lamia            |
-| spatial_track            | Track a spatially mobile seismic source                                 | nan                                                                                                                                                                                                                          | nan                                                                                                                     | nan              |
-| model_bedload            | Model the seismic spectrum due to bedload transport in rivers           | nan                                                                                                                                                                                                                          | nan                                                                                                                     | nan              |
-| model_turbulence         | Model the seismic spectrum due to hydraulic turbulence                  | nan                                                                                                                                                                                                                          | nan                                                                                                                     | nan              |
-
-### 1. Data Acquisition
-- **Purpose**: To collect seismology data from various sources.
-- **Inputs**: Source type (e.g., file path, database connection).
-- **Outputs**: Raw data in a structured format.
-### 2. Data Preprocessing
-- **Purpose**: To clean and transform raw data to a usable state.
-- **Inputs**: Raw data.
-- **Processes**:
-  - Handling missing values.
-  - Normalizing data.
-  - Filtering noise.
-- **Outputs**: Preprocessed data ready for analysis.
-### 3. Data Analysis
-- **Purpose**: To apply analytical methods to extract insights from data.
-- **Inputs**: Preprocessed data.
-- **Processes**:
-  - Frequency analysis.
-  - Event detection.
-  - Statistical analysis.
-- **Outputs**: Analytical results.
-### 4. Data Visualization
-- **Purpose**: To create visual representations of the analytical results.
-- **Inputs**: Analytical results.
-- **Processes**:
-  - Generating plots (e.g., time series, spectrograms).
-  - Creating interactive visualizations.
-- **Outputs**: Visualizations (e.g., charts, graphs).
-### 5. Reporting
-- **Purpose**: To compile results and visualizations into a comprehensive report.
-- **Inputs**: Analytical results, visualizations.
-- **Processes**:
-  - Formatting text.
-  - Embedding visualizations.
-- **Outputs**: Report document (e.g., PDF, HTML).
-## Functional Requirements
-1. **Data Acquisition Module**
-   - Should support importing data from various file formats (e.g., CSV, JSON).
-   - Should support connecting to online seismology databases.
-2. **Data Preprocessing Module**
-   - Should provide functions for handling missing values.
-   - Should include data normalization and noise filtering techniques.
-3. **Data Analysis Module**
-   - Should offer a range of analytical methods (e.g., frequency analysis, event detection).
-   - Should support statistical analysis of seismology data.
-4. **Data Visualization Module**
-   - Should enable creation of various plots (e.g., time series, spectrograms).
-   - Should support interactive visualizations.
-5. **Reporting Module**
-   - Should allow for the generation of comprehensive reports.
-   - Should support multiple report formats (e.g., PDF, HTML).
 ## Non-Functional Requirements
 1. **Performance**
    - The package should handle large datasets efficiently.
-   - The analysis and visualization processes should be optimized for speed.
+   - The processes should be optimized for speed.
 2. **Usability**
    - The package should have a clear and concise documentation.
-   - The interface should be user-friendly and intuitive.
+   - The tool should be user-friendly.
 3. **Scalability**
    - The package should be able to scale with increasing data sizes and complexity of analyses.
-   - It should support parallel processing where applicable.
 4. **Reliability**
    - The package should provide accurate and consistent results.
    - It should include error handling and logging mechanisms.
