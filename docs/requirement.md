@@ -2,21 +2,8 @@
 ## Abstract Workflow
 The package will provide a streamlined workflow for seismology data analysis and modelling.
 ## Activity Diagram
-```mermaid
-graph TD
-    A[Start] --> B[Model Creation]
-    B -->|Quality Check| C[Data Inversion]
-    B -->|Refine Model| B
-    C --> D[Seismic Distance Calculation]
-    D --> E[Seismic Signal Migration]
-    E --> F[Seismic Event Localization]
-    F --> G[Spatial Data Processing]
-    G --> H[Coordinate System Conversion]
-    H --> I[Source Location Determination]
-    I --> J[Seismic Source Tracking]
-    J --> K[Modelling]
-    K --> L[End]
-```
+![Activity Diagram](Activity_diagram.jpeg)
+
 ### Functional Requirements
 1. **Model Creation**: This is the first step where we create reference models using the methods: ***fmi_parameters*** and ***fmi_spectra***.
 2. **Data Inversion**: Here, we invert fluvial data sets based on the reference spectra catalogue created in the previous step using the method: ***fmi_inversion***.
