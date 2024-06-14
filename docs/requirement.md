@@ -2,7 +2,7 @@
 ## Abstract Workflow
 The package will provide a streamlined workflow for seismology data analysis and modelling.
 ## Activity Diagram
-<img src="image.jpg" alt="Alt Text" width="200"/>
+![Activity Diagram](ActivityDiagram.jpeg)
 
 ### Functional Requirements
 1. **Model Creation**: This is the first step where we create reference models using the methods: ***fmi_parameters*** and ***fmi_spectra***.
