@@ -19,10 +19,10 @@ The package will provide a streamlined workflow for seismology data analysis and
 | Abstract Workflow Node | Operation | Input(s) | Output(s) | Implementation |
 | --- | --- | --- | --- | --- |
 | **Model Creation** | | | | | |
-| fmi_inversion | Invert fluvial data set based on reference spectra catalogue |  |  | Frieder |
-| fmi_parameters | Create reference model reference parameter catalogue |  |  | Frieder |
+| fmi_inversion | Invert fluvial data set based on reference spectra catalogue | reference list, seismic dataset, number of cores | list containing the inversion results | Frieder |
+| fmi_parameters | Create reference model reference parameter catalogue | numerical values of ground, river and topographical parameters | list with with model reference parameters | Frieder |
 | **Data Inversion** | | | | | |
-| fmi_spectra | Create reference model spectra catalogue |  |  |  Frieder|
+| fmi_spectra | Create reference model spectra catalogue | list with model parameters, number of cores | list containing input parameters and calculated reference spectra |  Frieder|
 | **Seismic Distance Calculation** | | | | | |
 | spatial_distance | Calculate topography-corrected distances for seismic waves | ***stations:*** Numeric matrix of length two, x- and y-coordinates of the seismic stations <br> ***dem:*** SpatRaster object, the digital elevation model (DEM) to be processed <br> ***topography:*** Logical scalar, option to enable topography correction <br> ***maps:*** Logical scalar, option to enable/disable calculation of distance maps <br> ***matrix:*** Logical scalar, option to enable/disable calculation of interstation distances <br> ***aoi:*** Numeric vector of length four, bounding coordinates of the area of interest <br> ***verbose:*** Logical value, option to show extended function information | List object with distance maps (list of SpatRaster objects from terra package) and station distance matrix (data.frame) | Niaz <br>Available in `R package (eseis)`, to be translated to Python |
 | **Seismic Signal Migration** | | | | | |
