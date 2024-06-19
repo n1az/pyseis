@@ -1,6 +1,0 @@
-      Class Checking and Attributes:
-          The original R function checks if the list elements are of class eseis and extracts dt from data$meta$dt. In Python, I assume data objects have a meta attribute with a dt property.
-      Greatest Common Divisor:
-          The GCD computation uses Python's math.gcd function with functools.reduce to handle multiple values.
-      Error Handling:
-          The error messages and conditions have been translated to raise Python ValueError exceptions.
