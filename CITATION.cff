@@ -8,7 +8,7 @@ authors:
   - family-names: Morshed
     given-names: Niaz
   - family-names: Choudhury
-    given-names: Shahriar
+    given-names: Shahriar Shohid
 title: "Pyseis - contributing to environmental seismology data analysis in python"
 version: 0.1.0
 date-released: 
