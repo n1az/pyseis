@@ -27,10 +27,10 @@ def spatial_pmax(data):
     return max_locations
 
 # Example
-# if __name__ == "__main__":
-#     # Example usage
-#     example_data = np.random.rand(100, 100)
-#     max_locations = spatial_pmax(example_data)
-#     print("Most likely source location(s):")
-#     for loc in max_locations:
-#         print(loc)
+if __name__ == "__main__":
+    # Example usage
+    example_data = np.random.rand(100, 100)
+    max_locations = spatial_pmax(example_data)
+    print("Most likely source location(s):")
+    for loc in max_locations:
+        print(loc)
