@@ -38,7 +38,6 @@ def create_dem(xmin, xmax, ymin, ymax, res, filepath):
         dtype=dem.dtype,
         crs='+proj=latlong',
         transform=transform,
-        bounds=(xmin, ymin, xmax, ymax)  # Explicitly set bounds
     ) as dst:
         dst.write(dem, 1)
     
@@ -46,67 +45,109 @@ def create_dem(xmin, xmax, ymin, ymax, res, filepath):
     return filepath
 
 # Main code
-# Define station coordinates
-sta = np.array([[1000, 1000], [9000, 1000], [5000, 9000]])
-sta_ids = ['A', 'B', 'C']
+if __name__ == "__main__":
+    # Define station coordinates (in the same coordinate system as the DEM)
+    sta = np.array([[25, 25], [75, 75], [50, 90]])  # Adjusted to be within DEM bounds
+    sta_ids = ['A', 'B', 'C']
 
-# Create and save synthetic DEM
-dem_filepath = create_dem(0, 10000, 0, 10000, res=(100, 100), filepath='synthetic_dem.tif')
+    # Create and save synthetic DEM
+    dem_filepath = create_dem(0, 100, 0, 100, res=(1, 1), filepath='synthetic_dem.tif')
 
-# Read the DEM back in as a rasterio object
-with rasterio.open(dem_filepath) as dem:
-    print(f"Loaded DEM bounds: {dem.bounds}")
-    print(f"Loaded DEM shape: {dem.shape}")
-    print(f"Loaded DEM transform: {dem.transform}")
-    
+    # Read the DEM back in as a rasterio object
+    with rasterio.open(dem_filepath) as dem:
+        print(f"Loaded DEM bounds: {dem.bounds}")
+        print(f"Loaded DEM shape: {dem.shape}")
+        print(f"Loaded DEM transform: {dem.transform}")
 
+        # Ensure station coordinates are within DEM bounds
+        dem_bounds = dem.bounds
+        for coord in sta:
+            if not (dem_bounds.left <= coord[0] <= dem_bounds.right and dem_bounds.bottom <= coord[1] <= dem_bounds.top):
+                raise ValueError(f"Station coordinate {coord} is outside DEM extent!")
 
-# Read the DEM back in as a rasterio object
-with rasterio.open(dem_filepath) as dem:
-    transform = dem.transform
+        # Plot DEM and stations
+        fig, ax = plt.subplots(figsize=(10, 10))
+        dem_data = dem.read(1)
+        im = ax.imshow(dem_data, extent=(dem_bounds.left, dem_bounds.right, dem_bounds.bottom, dem_bounds.top), origin='lower', cmap='terrain')
+        for i, (x, y) in enumerate(sta):
+            ax.plot(x, y, 'ro')
+            ax.text(x, y, sta_ids[i], color='white', fontsize=12, ha='right', va='bottom')
+        plt.colorbar(im, label='Elevation')
+        ax.set_title('DEM with Station Locations')
+        ax.set_xlabel('X coordinate')
+        ax.set_ylabel('Y coordinate')
+        plt.show()
 
-    # Ensure station coordinates are within DEM bounds
-    dem_bounds = dem.bounds
-    for coord in sta:
-        if not (dem_bounds.left <= coord[0] <= dem_bounds.right and dem_bounds.bottom <= coord[1] <= dem_bounds.top):
-            raise ValueError("Some station coordinates are outside DEM extent!")
-    # After creating the transform in create_dem function
-    print(f"Created transform: {transform}")
+        print(f"Main code - DEM bounds: {dem.bounds}")
+        print(f"Main code - Station coordinates:\n{sta}")
 
-    # Create synthetic signal
-    x = np.arange(1, 1001)
-    s = np.vstack([
-        norm.pdf(x, 500, 50) * 100,
-        norm.pdf(x, 500, 50) * 2,
-        norm.pdf(x, 500, 50) * 1
-    ])
+        # Calculate spatial distance maps and inter-station distances
+        result = spatial_distance.spatial_distance(sta, dem_filepath, verbose=True)
 
-    # Plot DEM and stations
-    plt.figure(figsize=(10, 10))
-    plt.imshow(dem.read(1), extent=(dem_bounds.left, dem_bounds.right, dem_bounds.bottom, dem_bounds.top), origin='lower', cmap='terrain')
-    for i, (x, y) in enumerate(sta):
-        plt.plot(x, y, 'ro')
-        plt.text(x, y, sta_ids[i], color='white', fontsize=12, ha='right', va='bottom')
-    plt.colorbar(label='Elevation')
-    plt.title('DEM with Station Locations')
-    plt.xlabel('X coordinate')
-    plt.ylabel('Y coordinate')
-    plt.show()
-    
-    print(f"Main code - DEM bounds: {dem.bounds}")
-    print(f"Main code - Station coordinates:\n{sta}")
+        # Plot the distance matrix
+        fig, ax = plt.subplots(figsize=(10, 8))
+        im = ax.imshow(result['matrix'], cmap='viridis')
+        plt.colorbar(im, label='Distance')
+        ax.set_title('Distance Matrix between Stations')
+        ax.set_xlabel('Station Index')
+        ax.set_ylabel('Station Index')
+        for i in range(len(sta)):
+            for j in range(len(sta)):
+                ax.text(j, i, f"{result['matrix'][i, j]:.2f}", 
+                         ha='center', va='center', color='white')
+        plt.tight_layout()
+        plt.show()
 
-    # Calculate spatial distance maps and inter-station distances
-    D = spatial_distance.spatial_distance(sta, dem)
+        # Plot the distance maps
+        fig, axs = plt.subplots(1, len(sta), figsize=(5*len(sta), 5))
+        if len(sta) == 1:
+            axs = [axs]
+        for i, map_data in enumerate(result['maps']):
+            if map_data is not None:
+                im = axs[i].imshow(map_data['values'], cmap='viridis', extent=(dem_bounds.left, dem_bounds.right, dem_bounds.bottom, dem_bounds.top), origin='lower')
+                axs[i].set_title(f'Distance Map for Station {sta_ids[i]}')
+                plt.colorbar(im, ax=axs[i], label='Distance')
+                axs[i].plot(sta[i, 0], sta[i, 1], 'ro', markersize=10)
+                axs[i].text(sta[i, 0], sta[i, 1], sta_ids[i], color='white', fontsize=12, ha='right', va='bottom')
+        plt.tight_layout()
+        plt.show()
 
-    # Locate signal
-    e = spatial_amplitude.spatial_amplitude(s, D, v=500, q=50, f=10)
+         # Create synthetic signal
+        x = np.arange(1, 1001)
+        s = np.vstack([
+            norm.pdf(x, 500, 50) * 100,
+            norm.pdf(x, 500, 50) * 2,
+            norm.pdf(x, 500, 50) * 1
+        ])
 
-    # Get most likely location coordinates
-    e_max = spatial_pmax.spatial_pmax(e)
+        # Locate signal
+        coupling = np.ones(len(sta))  # Assuming uniform coupling efficiency
+        e = spatial_amplitude.spatial_amplitude(
+            data=s,
+            coupling=coupling,
+            d_map=result['maps'],
+            v=500,
+            q=50,
+            f=10
+        )
 
-    # Plot output
-    plt.imshow(e, extent=(dem_bounds.left, dem_bounds.right, dem_bounds.bottom, dem_bounds.top), origin='lower')
-    plt.plot(e_max[0], e_max[1], 'ro')  # Adjust if needed based on your function output format
-    plt.plot(sta[:, 0], sta[:, 1], 'bo')
-    plt.show()
+        # Get most likely location coordinates
+        e_max = spatial_pmax.spatial_pmax(e)
+
+        # Plot output
+        fig, ax = plt.subplots(figsize=(10, 10))
+        e_data = e.read(1)  # Read the data from the raster
+        im = ax.imshow(e_data, extent=(dem_bounds.left, dem_bounds.right, dem_bounds.bottom, dem_bounds.top), origin='lower', cmap='viridis')
+        plt.colorbar(im, label='Amplitude')
+        ax.plot(e_max[0], e_max[1], 'ro', markersize=10, label='Max Amplitude')
+        for i, (x, y) in enumerate(sta):
+            ax.plot(x, y, 'bo', markersize=8)
+            ax.text(x, y, sta_ids[i], color='white', fontsize=12, ha='right', va='bottom')
+        ax.set_title('Spatial Amplitude and Most Likely Location')
+        ax.set_xlabel('X coordinate')
+        ax.set_ylabel('Y coordinate')
+        ax.legend()
+        plt.show()
+
+    # Delete the temporary DEM file
+    os.remove(dem_filepath)
