@@ -3,7 +3,6 @@ import pandas as pd
 from scipy.integrate import quad
 from scipy.constants import pi, g
 
-
 def model_bedload(frequencies, q_s, d_50, slope, d_b, p=None, adjustment=False, eseis=False, **kwargs):
     """
     Calculate the seismic spectrum for river bedload transport.
@@ -80,16 +79,12 @@ def model_bedload(frequencies, q_s, d_50, slope, d_b, p=None, adjustment=False, 
     z = []
     for f in frequencies:
         if adjustment:
-            z.append(np.sum(p2['p_s'] * ((params['c_1'] * p2['w_w'] * q_s * p2['w_s'] * pi ** 2 * p1[0] ** 3 * p2[
-                'm'] ** 2 * p2['w_i'] ** 2 * p1[1]) /
-                                         (p2['v_p'] * p2['u_b'] * p2['h_b'] * p2['r_s'] ** 2 * p1[2] ** 3 * p1[
-                                             3] ** 2)) * (params['c_1'] * p2['w_s']) * np.abs(
-                1 + (1j * p2['v_p'] * p2['u_b'] * p2['h_b']) / (params['c_1'] * p2['w_s'])) ** 2 / 2))
+            z.append(np.sum(p2['p_s'] * ((params['c_1'] * params['r_w'] * q_s * p2['w_s'] * pi ** 2 * p1[0] ** 3 * p2['m'] ** 2 * p2['w_i'] ** 2 * p1[1]) /
+                                         (p2['v_p'] * p2['u_b'] * p2['h_b'] * p2['r_s'] ** 2 * p1[2] ** 3 * p1[3] ** 2)) * 
+                            (params['c_1'] * p2['w_s']) * np.abs(1 + (1j * p2['v_p'] * p2['u_b'] * p2['h_b']) / (params['c_1'] * p2['w_s'])) ** 2 / 2))
         else:
-            z.append(np.sum(p2['p_s'] * ((params['c_1'] * p2['w_w'] * q_s * p2['w_s'] * pi ** 2 * p1[0] ** 3 * p2[
-                'm'] ** 2 * p2['w_i'] ** 2 * p1[1]) /
-                                         (p2['v_p'] * p2['u_b'] * p2['h_b'] * p2['r_s'] ** 2 * p1[2] ** 3 * p1[
-                                             3] ** 2))))
+            z.append(np.sum(p2['p_s'] * ((params['c_1'] * params['r_w'] * q_s * p2['w_s'] * pi ** 2 * p1[0] ** 3 * p2['m'] ** 2 * p2['w_i'] ** 2 * p1[1]) /
+                                         (p2['v_p'] * p2['u_b'] * p2['h_b'] * p2['r_s'] ** 2 * p1[2] ** 3 * p1[3] ** 2))))
 
     # Create output DataFrame
     P = pd.DataFrame({'frequency': frequencies, 'power': z})
@@ -99,4 +94,3 @@ def model_bedload(frequencies, q_s, d_50, slope, d_b, p=None, adjustment=False, 
         pass
 
     return P
-
