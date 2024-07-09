@@ -1,20 +1,39 @@
 # Pyseis
-## Abstract Workflow
-The package will provide a streamlined workflow for seismology data analysis and modelling.
-## Activity Diagram
-![Activity Diagram](ActivityDiagram.jpeg)
+## Functional Requirements
 
-### Functional Requirements
-1. **Model Creation**: This is the first step where we create reference models using the methods: ***fmi_parameters*** and ***fmi_spectra***.
-2. **Data Inversion**: Here, we invert fluvial data sets based on the reference spectra catalogue created in the previous step using the method: ***fmi_inversion***.
-3. **Seismic Distance Calculation**: In this step, we calculate the topography-corrected distances for seismic waves using the method: ***spatial_distance***.
-4. **Seismic Signal Migration**: Now, we migrate the seismic signals through a grid of locations using the method: ***spatial_migrate***.
-5. **Seismic Event Localization**: At this stage, we locate the source of a seismic event by modelling amplitude attenuation using the method: ***spatial_amplitude***.
-6. **Spatial Data Processing**: Here, we process the spatial data by clipping values and normalizing them if necessary using the method: ***spatial_clip***.
-7. **Coordinate System Conversion**: In this step, we convert the coordinates between different reference systems using the method: ***spatial_convert***.
-8. **Source Location Determination**: Now, we determine the most likely source location(s) based on the processed data using the method: ***spatial_pmax***.
-9. **Seismic Source Tracking**: At this stage, we track a spatially mobile seismic source using the method: ***spatial_track***.
-10. **Modelling**: Finally, we model the seismic spectrum due to bedload transport in rivers and hydraulic turbulence using the methods: ***model_bedload*** and ***model_turbulence***.
+### Abstract Description
+
+The data analysis workflow is designed to facilitate the translation and validation of seismological data analysis components from the R programming language to Python. This workflow ensures that the translated components are functionally equivalent to their original counterparts by comparing the outputs from both implementations. Below is an abstract description of each step in the workflow:
+
+### Component Selection
+Identify and select specific components from the existing `eseis` package, which is used for seismological data analysis in R. We only selected the components which are not currently available in Python.
+
+### Translation to Python
+Translate the selected R components into Python, ensuring that the functionality and logic of the original components are preserved.
+
+### Unit Testing
+Conduct unit testing on the translated Python components to verify their correctness and ensure they perform as expected.
+
+### Output Generation
+Generate outputs using both the translated Python components and the original R components. This step is performed in parallel to maintain efficiency.
+
+### Output Comparison
+Compare the outputs generated from the Python and R implementations to check for consistency and accuracy.
+
+### Validation Decision
+Evaluate whether the outputs from both implementations match:
+- **If the outputs match**: The workflow concludes successfully, indicating that the translated Python components are functionally equivalent to the original R components.
+- **If the outputs do not match**: Debug the translated components, identify discrepancies, and reiterate the translation process until the outputs match.
+
+### Debug and Reiterate
+If discrepancies are found during the output comparison, debug the translated Python components. This involves analyzing the differences, correcting any issues, and repeating the translation and validation steps until consistency is achieved.
+
+## UML Activity Diagram
+
+Below is the PlantUML code for the described activity diagram, incorporating the loop back to the translation step using the `repeat` syntax:
+
+![Activity Diagram](diagram_updated.png)
+
 ## Component Analysis
 | Abstract Workflow Node | Operation | Input(s) | Output(s) | Implementation |
 | --- | --- | --- | --- | --- |
