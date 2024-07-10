@@ -90,8 +90,12 @@ psd <- do.call(cbind, lapply(hq, function(hq) {
 X <- fmi_inversion(reference = ref_spectra, data = psd)
 
 ## plot model results
+png("R/output/R_fmi_inversion0.png")
 plot(X$parameters$q_s * 2650, type = "l")
+dev.off()
+png("R/output/R_fmi_inversion1.png")
 plot(X$parameters$h_w, type = "l")
+dev.off()
 
 ############### Spatial ###############
 
