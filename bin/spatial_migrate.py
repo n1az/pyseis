@@ -3,6 +3,7 @@ from scipy.signal import correlate
 import rasterio
 from rasterio import features
 from shapely.geometry import Point, LineString
+from rasterio.io import MemoryFile
 
 def spatial_migrate(data, d_stations, d_map, v, dt, snr=None, normalise=True, verbose=False):
     """
@@ -83,51 +84,70 @@ def spatial_migrate(data, d_stations, d_map, v, dt, snr=None, normalise=True, ve
     pairs = [(i, j) for i in range(data.shape[0]) for j in range(i + 1, data.shape[0])]
 
     # Build raster objects from map metadata
-    d_map = [rasterio.open(d_map[i]) for i in range(len(d_map))]
+    with rasterio.Env():
+        try:
+            d_map = [d_map[i] if isinstance(d_map[i], rasterio.io.DatasetReader) else rasterio.open(d_map[i]) for i in range(len(d_map))]
+        except Exception as e:
+            print(f"Error opening distance maps: {e}")
+            raise
 
-    # Process all station pairs
-    maps = []
-    for pair in pairs:
-        # Calculate cross-correlation function
-        cc = correlate(data[pair[0]], data[pair[1]], mode='full')
-        lags = np.arange(-cc.size // 2 + 1, cc.size // 2 + 1) * dt
+        if verbose:
+            print(f"Number of distance maps: {len(d_map)}")
+            print(f"Type of first distance map: {type(d_map[0])}")
 
-        # Collect/transform velocity value(s)
-        if isinstance(v, float):
-            v_lag = v
-        else:
-            v_lag = v.read(1)[0]
+        # Process all station pairs
+        maps_sum = None
+        for pair in pairs:
+            # Calculate cross-correlation function
+            cc = correlate(data[pair[0]], data[pair[1]], mode='full')
+            lags = np.arange(-cc.size // 2 + 1, cc.size // 2 + 1) * dt
 
-        # Calculate minimum and maximum possible lag times
-        lag_lim = np.max(np.ceil(d_stations[pair] / v_lag))
-        lag_ok = np.abs(lags) <= lag_lim
-        lags = lags[lag_ok]
-        cors = cc[lag_ok]
+            # Collect/transform velocity value(s)
+            if isinstance(v, float):
+                v_lag = v
+            else:
+                v_lag = v.read(1)[0]
 
-        # Calculate SNR normalization factor
-        if normalise:
-            norm = ((s_snr[pair[0]] + s_snr[pair[1]]) / 2) / np.mean(s_snr)
-        else:
-            norm = 1
+            # Calculate minimum and maximum possible lag times
+            lag_lim = np.max(np.ceil(d_stations[pair] / v_lag))
+            lag_ok = np.abs(lags) <= lag_lim
+            lags = lags[lag_ok]
+            cors = cc[lag_ok]
 
-        # Get lag for maximum correlation
-        t_max = lags[np.argmax(cors)]
+            # Calculate SNR normalization factor
+            if normalise:
+                norm = ((s_snr[pair[0]] + s_snr[pair[1]]) / 2) / np.mean(s_snr)
+            else:
+                norm = 1
 
-        # Calculate modeled and empirical lag times
-        lag_model = (d_map[pair[0]].read(1) - d_map[pair[1]].read(1)) / v_lag
-        lag_empiric = d_stations[pair] / v_lag
+            # Get lag for maximum correlation
+            t_max = lags[np.argmax(cors)]
 
-        # Calculate source density map
-        cors_map = np.exp(-0.5 * (((lag_model - t_max) / lag_empiric) ** 2)) * norm
+            # Calculate modeled and empirical lag times
+            try:
+                lag_model = (d_map[pair[0]].read(1) - d_map[pair[1]].read(1)) / v_lag
+                lag_empiric = d_stations[pair] / v_lag
+            except Exception as e:
+                print(f"Error reading distance map for pair {pair}: {e}")
+                raise
 
-        maps.append(cors_map)
+            # Calculate source density map
+            cors_map = np.exp(-0.5 * (((lag_model - t_max) / lag_empiric) ** 2)) * norm
 
-    # Convert list to 2D array
-    maps_values = np.stack(maps, axis=0)
+            if maps_sum is None:
+                maps_sum = cors_map
+            else:
+                maps_sum += cors_map
 
-    # Assign sum of density values to output raster
-    map_out = d_map[0].copy()
-    map_out.write(np.mean(maps_values, axis=0), 1)
+        # Assign mean of density values to output raster
+        profile = d_map[0].profile.copy()
+        map_out = MemoryFile().open(**profile)
+        map_out.write(maps_sum / len(pairs), 1)
+
+        # Make sure to close all opened datasets
+        for dataset in d_map:
+            if isinstance(dataset, rasterio.io.DatasetReader):
+                dataset.close()
 
     # Return output
     return map_out

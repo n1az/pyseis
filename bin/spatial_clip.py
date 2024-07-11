@@ -1,5 +1,6 @@
 import numpy as np
 import rasterio
+from rasterio.io import MemoryFile
 
 def spatial_clip(data, quantile, replace=np.nan, normalise=True):
     """
@@ -34,7 +35,11 @@ def spatial_clip(data, quantile, replace=np.nan, normalise=True):
         raster_data = (raster_data - np.nanmin(raster_data)) / (np.nanmax(raster_data) - np.nanmin(raster_data))
 
     # Create a new raster with clipped values
-    clipped_raster = data.copy()
-    clipped_raster.write(raster_data, 1)
+    profile = data.profile.copy()
+    with MemoryFile() as memfile:
+        with memfile.open(**profile) as clipped_raster:
+            clipped_raster.write(raster_data, 1)
+        # Open the dataset in read mode
+        clipped_dataset = memfile.open()
 
-    return clipped_raster
+    return clipped_dataset

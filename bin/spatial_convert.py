@@ -1,6 +1,6 @@
 import numpy as np
 import rasterio
-from rasterio.warp import transform_coords
+from rasterio.warp import transform
 
 def spatial_convert(data, from_proj, to_proj):
     """
@@ -48,6 +48,7 @@ def spatial_convert(data, from_proj, to_proj):
 
     # Convert coordinates
     with rasterio.Env():
-        converted_coords = transform_coords(from_proj, to_proj, data[:, 0], data[:, 1])
+        xs, ys = data[:, 0], data[:, 1]
+        converted_xs, converted_ys = transform(from_proj, to_proj, xs, ys)
 
-    return np.column_stack(converted_coords)
+    return np.column_stack((converted_xs, converted_ys))

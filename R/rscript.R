@@ -5,7 +5,16 @@ library(httpgd)
 
 data("volcano")
 data("rockfall")
-setwd("/home/frieder/studium/SoSe24/RSE/pyseis/")
+# Get the current working directory (where the script is being executed)
+current_dir <- getwd()
+
+# Get the parent directory
+parent_dir <- dirname(current_dir)
+
+# Set the working directory to the parent directory
+setwd(current_dir)
+
+print(getwd())
 
 ############### FMI ###############
 
