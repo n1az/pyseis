@@ -112,7 +112,7 @@ if __name__ == "__main__":
         plt.tight_layout()
         plt.show()
 
-         # Create synthetic signal
+        # Create synthetic signal
         x = np.arange(1, 1001)
         s = np.vstack([
             norm.pdf(x, 500, 50) * 100,

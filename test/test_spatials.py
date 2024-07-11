@@ -11,7 +11,7 @@ import sys
 script_directory = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.join(script_directory, '..'))
 
-from bin import spatial_distance, spatial_migrate, spatial_clip, spatial_convert
+from bin import spatial_distance, spatial_migrate, spatial_clip, spatial_convert, spatial_amplitude, spatial_pmax
 
 # Function to create a synthetic DEM and save it to a file
 def create_dem(xmin, xmax, ymin, ymax, res, filepath):
@@ -148,6 +148,55 @@ if __name__ == "__main__":
                 axs[i].text(sta[i, 0], sta[i, 1], sta_ids[i], color='white', fontsize=12, ha='right', va='bottom')
         plt.tight_layout()
         plt.show()
+        
+        # Create synthetic signal
+        x = np.arange(1, 1001)
+        s = np.vstack([
+            norm.pdf(x, 500, 50) * 100,
+            norm.pdf(x, 500, 50) * 2,
+            norm.pdf(x, 500, 50) * 1
+        ])
+
+        # Locate signal using spatial_amplitude
+        coupling = np.ones(len(sta))  # Assuming uniform coupling efficiency
+        # Locate signal using spatial_amplitude
+        e = spatial_amplitude.spatial_amplitude(
+            data=s,
+            coupling=coupling,
+            d_map=result['maps'],  # Pass the distance map dictionaries directly
+            v=500,
+            q=50,
+            f=10
+        )
+
+        # Get most likely location coordinates
+        e_max_list = spatial_pmax.spatial_pmax(e)
+        print("e_max_list:", e_max_list)
+
+        # Plot output
+        fig, ax = plt.subplots(figsize=(10, 10))
+        
+        # The result is now a MemoryFile, which can be used like a regular rasterio dataset
+        with e.open() as dataset:
+            e_data = dataset.read(1)
+            im = ax.imshow(e_data, extent=(dem.bounds.left, dem.bounds.right, dem.bounds.bottom, dem.bounds.top), 
+                        origin='lower', cmap='viridis')
+            plt.colorbar(im, label='Amplitude')
+            
+            # Plot all maximum amplitude locations
+            if e_max_list:
+                for i, e_max in enumerate(e_max_list):
+                    ax.plot(e_max[0], e_max[1], 'ro', markersize=10, label=f'Max Amplitude {i+1}' if i == 0 else "")
+                for i, (x, y) in enumerate(sta):
+                    ax.plot(x, y, 'bo', markersize=8)
+                    ax.text(x, y, sta_ids[i], color='white', fontsize=12, ha='right', va='bottom')
+                ax.set_title('Spatial Amplitude and Most Likely Location(s)')
+                ax.set_xlabel('X coordinate')
+                ax.set_ylabel('Y coordinate')
+                ax.legend()
+                plt.show()
+            else:
+                print("No maximum amplitude points found.")
 
         # Create synthetic seismic signals
         num_samples = 1000
