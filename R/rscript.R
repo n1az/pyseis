@@ -5,7 +5,14 @@ library(httpgd)
 
 data("volcano")
 data("rockfall")
-setwd("/home/frieder/studium/SoSe24/RSE/pyseis/")
+# Get the current working directory (where the script is being executed)
+current_dir <- getwd()
+
+# Get the parent directory
+parent_dir <- dirname(current_dir)
+
+# Set the working directory to the parent directory
+setwd(parent_dir)
 
 ############### FMI ###############
 
@@ -227,7 +234,7 @@ df_xy <- data.frame(x = c(10, 11), y = c(54, 55))
 spatial_convert(data = df_xy, from = proj_in, to = proj_out)
 write.csv(df_xy, file = "R/output/R_spatial_convert_set.csv")
 
-print("spatial_track")
+
 # create artificial data set
 # Set seed for reproducibility
 set.seed(123)
@@ -245,18 +252,19 @@ data_df <- data.frame(t(data))
 colnames(data_df) <- paste0("Station_", 1:num_stations)
 data_df$Time <- 1:data_length
 
-x <- spatial_track(
-    data = data_df,
-    window = 3,
-    overlap = 0.5,
-    d_map = D$maps,
-    v = 800,
-    q = 40,
-    f = 12,
-    qt = 0.99,
-    dt = 2
-    )
-
+# """
+# x <- spatial_track(
+#     data = data_df,
+#     window = 3,
+#     overlap = 0.5,
+#     d_map = D$maps,
+#     v = 800,
+#     q = 40,
+#     f = 12,
+#     qt = 0.99,
+#     dt = 2
+#     )
+# """
 ############### Modeling ###############
 
 ## model amplitude

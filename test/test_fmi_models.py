@@ -2,14 +2,57 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 import sys
+import csv
+from datetime import datetime
 
 # Add the parent directory to the path to import custom functions
 script_directory = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.join(script_directory, '..'))
+output_dir = os.path.join(script_directory, 'output')
+os.makedirs(output_dir, exist_ok=True)
 
 # Import the pre-implemented functions
 from bin import fmi_parameters, model_bedload, model_turbulence, fmi_spectra, fmi_inversion
+
+def save_plot(fig, filename):
+    """
+    Save the given figure to the output folder.
+
+    Args:
+        fig (matplotlib.figure.Figure): The figure to save.
+        filename (str): The name of the file to save the figure as.
+    """
+    fig.savefig(os.path.join(output_dir, filename))
+
+def save_csv(data, filename, headers=None):
+    """
+    Save the given data to a CSV file in the output folder.
+
+    Args:
+        data (list): The data to save.
+        filename (str): The name of the file to save the data as.
+        headers (list, optional): The headers for the CSV file.
+    """
+    with open(os.path.join(output_dir, filename), 'w', newline='') as f:
+        writer = csv.writer(f)
+        if headers:
+            writer.writerow(headers)
+        writer.writerows(data)
+
 def main():
+    """
+    Main function to test FMI (Fluvial Monitor Inversion) and model functions.
+    
+    This function performs the following tasks:
+    1. Creates example reference parameter sets
+    2. Generates corresponding reference spectra
+    3. Plots and saves the generated spectra
+    4. Defines water level and bedload flux time series
+    5. Calculates and plots a synthetic spectrogram
+    6. Inverts empiric data set and plots RMSE per frequency
+    
+    All plots and results are saved in the 'output' folder.
+    """
     # Create example reference parameter sets
     ref_pars = fmi_parameters.fmi_parameters(
         n=2,
@@ -33,9 +76,27 @@ def main():
         res=100
     )
 
+    # Save ref_pars to CSV
+    ref_pars_headers = ['Parameter'] + [f'Set {i+1}' for i in range(len(ref_pars))]
+    ref_pars_data = []
+    
+    # Get all unique keys from all dictionaries
+    all_keys = set().union(*ref_pars)
+    
+    for key in all_keys:
+        row = [key] + [par.get(key, '') for par in ref_pars]
+        ref_pars_data.append(row)
+
+    save_csv(ref_pars_data, 'Py_fmi_par.csv', headers=ref_pars_headers)
+    
     # Create corresponding reference spectra
     ref_spectra = fmi_spectra.fmi_spectra(parameters=ref_pars, n_cores=2)
     
+    # Save ref_spectra to CSV
+    for i, spectrum in enumerate(ref_spectra):
+        spectrum_data = list(zip(spectrum['frequency'], spectrum['power'], spectrum['turbulence'], spectrum['bedload']))
+        save_csv(spectrum_data, f'Py_fmi_ref_spectrum_{i+1}.csv', headers=['Frequency', 'Power', 'Turbulence', 'Bedload'])
+
     # Print results
     print(f"Number of spectra calculated: {len(ref_spectra)}")
     for i, spectrum in enumerate(ref_spectra):
@@ -73,6 +134,7 @@ def main():
     plt.xscale('log')
     plt.grid(True)
     plt.tight_layout()
+    save_plot(plt.gcf(), 'Py_fmi_spectra.png')
     plt.show()
 
     # Plot individual spectra
@@ -88,7 +150,15 @@ def main():
         plt.xscale('log')
         plt.grid(True)
         plt.tight_layout()
+        save_plot(plt.gcf(), f'Py_fmi_spectrum_{i+1}.png')
         plt.show()
+
+        # Save spectrum data to CSV
+        save_csv(
+            list(zip(spectrum['frequency'], spectrum['power'], spectrum['turbulence'], spectrum['bedload'])),
+            f'Py_fmi_spectrum_{i+1}.csv',
+            headers=['Frequency', 'Power', 'Turbulence', 'Bedload']
+        )
 
     # Define water level and bedload flux time series
     h = np.array([0.01, 1.00, 0.84, 0.60, 0.43, 0.32, 0.24, 0.18, 0.14, 0.11])
@@ -126,7 +196,11 @@ def main():
     plt.title('Synthetic Spectrogram')
     plt.xlabel('Time step')
     plt.ylabel('Frequency index')
+    save_plot(plt.gcf(), 'Py_fmi_original.png')
     plt.show()
+
+    # Save synthetic spectrogram data to CSV
+    save_csv(psd, 'Py_fmi_syn_spect.csv')
 
     # Invert empiric data set
     try:
@@ -139,7 +213,11 @@ def main():
         plt.title('RMSE per Frequency')
         plt.xlabel('Time step')
         plt.ylabel('Frequency index')
+        save_plot(plt.gcf(), 'Py_fmi_rmse.png')
         plt.show()
+
+        # Save RMSE data to CSV
+        save_csv(result['rmse'], 'Py_fmi_rmse.csv')
 
     except Exception as e:
         print(f"Error during inversion or plotting: {str(e)}")

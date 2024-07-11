@@ -12,9 +12,24 @@ script_directory = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.join(script_directory, '..'))
 
 from bin import spatial_distance, spatial_migrate, spatial_clip, spatial_convert, spatial_amplitude, spatial_pmax
+from test_fmi_models import save_plot, save_csv
 
 # Function to create a synthetic DEM and save it to a file
 def create_dem(xmin, xmax, ymin, ymax, res, filepath):
+    """
+    Create a synthetic Digital Elevation Model (DEM) and save it to a file.
+
+    Args:
+        xmin (float): Minimum x-coordinate of the DEM.
+        xmax (float): Maximum x-coordinate of the DEM.
+        ymin (float): Minimum y-coordinate of the DEM.
+        ymax (float): Maximum y-coordinate of the DEM.
+        res (tuple): Resolution of the DEM in (x, y) direction.
+        filepath (str): Path to save the DEM file.
+
+    Returns:
+        str: Path to the saved DEM file.
+    """
     width = int((xmax - xmin) / res[0])
     height = int((ymax - ymin) / res[1])
     print(f"Creating DEM with dimensions: {width}x{height}")
@@ -48,6 +63,12 @@ def create_dem(xmin, xmax, ymin, ymax, res, filepath):
 def convert_to_memoryfile(map_data):
     """
     Convert a distance map dictionary to a MemoryFile object.
+
+    Args:
+        map_data (dict): Dictionary containing the distance map data.
+
+    Returns:
+        rasterio.io.MemoryFile: Opened MemoryFile dataset.
     """
     profile = {
         'driver': 'GTiff',
@@ -65,6 +86,13 @@ def convert_to_memoryfile(map_data):
 
 # Main code
 if __name__ == "__main__":
+    """
+    Main function to perform spatial analysis on synthetic data.
+
+    This function creates a synthetic DEM, calculates spatial distances,
+    performs spatial amplitude analysis, and applies spatial migration.
+    It also saves relevant plots and data to CSV files.
+    """
     # Define station coordinates (in the same coordinate system as the DEM)
     sta = np.array([[25, 25], [75, 75], [50, 90]])  # Adjusted to be within DEM bounds
     sta_ids = ['A', 'B', 'C']
@@ -113,6 +141,7 @@ if __name__ == "__main__":
             ax.set_title('DEM with Station Locations')
             ax.set_xlabel('X coordinate')
             ax.set_ylabel('Y coordinate')
+            save_plot(fig, 'Py_spatial_dist_0.png')
             plt.show()
 
             print(f"Main code - DEM bounds: {dem.bounds}")
@@ -133,7 +162,11 @@ if __name__ == "__main__":
                 ax.text(j, i, f"{result['matrix'][i, j]:.2f}", 
                          ha='center', va='center', color='white')
         plt.tight_layout()
+        save_plot(fig, 'Py_spatial_dist_mat.png')
         plt.show()
+        
+        # Save distance matrix to CSV
+        save_csv(result['matrix'], 'distance_matrix.csv', headers=sta_ids)
 
         # Plot the distance maps
         fig, axs = plt.subplots(1, len(sta), figsize=(5*len(sta), 5))
@@ -147,6 +180,7 @@ if __name__ == "__main__":
                 axs[i].plot(sta[i, 0], sta[i, 1], 'ro', markersize=10)
                 axs[i].text(sta[i, 0], sta[i, 1], sta_ids[i], color='white', fontsize=12, ha='right', va='bottom')
         plt.tight_layout()
+        save_plot(fig, 'distance_maps.png')
         plt.show()
         
         # Create synthetic signal
@@ -156,6 +190,9 @@ if __name__ == "__main__":
             norm.pdf(x, 500, 50) * 2,
             norm.pdf(x, 500, 50) * 1
         ])
+        
+        # Save synthetic signal to CSV
+        save_csv(s.T, 'Py_spatial_synth_signal.csv', headers=sta_ids)
 
         # Locate signal using spatial_amplitude
         coupling = np.ones(len(sta))  # Assuming uniform coupling efficiency
@@ -194,6 +231,7 @@ if __name__ == "__main__":
                 ax.set_xlabel('X coordinate')
                 ax.set_ylabel('Y coordinate')
                 ax.legend()
+                save_plot(fig, 'Py_spatial_amp.png')
                 plt.show()
             else:
                 print("No maximum amplitude points found.")
@@ -207,6 +245,9 @@ if __name__ == "__main__":
             noise = np.random.normal(0, 0.1, num_samples)
             data.append(signal + noise)
         data = np.array(data)
+        
+        # Save synthetic seismic signals to CSV
+        save_csv(data.T, 'synthetic_seismic_signals.csv', headers=sta_ids)
 
         # Set parameters for spatial_migrate
         v = 3000.0  # Velocity in m/s (as float)
@@ -214,16 +255,6 @@ if __name__ == "__main__":
 
         # Convert distance maps to MemoryFile objects and open them
         memory_files = [convert_to_memoryfile(map_data) for map_data in result['maps']]
-
-        # Print debug information
-        print(f"Type of d_stations: {type(result['matrix'])}")
-        print(f"Shape of d_stations: {result['matrix'].shape}")
-        print(f"Type of d_map: {type(memory_files)}")
-        print(f"Number of items in d_map: {len(memory_files)}")
-        print(f"Type of v: {type(v)}")
-        print(f"Value of v: {v}")
-        print(f"Type of dt: {type(dt)}")
-        print(f"Value of dt: {dt}")
 
         # Call spatial_migrate function
         migrated_result = spatial_migrate.spatial_migrate(
@@ -270,7 +301,12 @@ if __name__ == "__main__":
             ax2.text(x, y, sta_ids[i], color='white', fontsize=12, ha='right', va='bottom')
 
         plt.tight_layout()
+        save_plot(fig, 'Py_spatial_migration.png')
         plt.show()
+        
+        # Save migrated and clipped data to CSV
+        save_csv(migrated_data, 'Py_spatial_migrated_data.csv')
+        save_csv(clipped_data, 'Py_spatial_clipped_migrated_data.csv')
 
         # Print summary statistics of the clipped result
         print("\nClipped migrated data summary:")
@@ -293,6 +329,7 @@ if __name__ == "__main__":
             ax.plot(x, y, 'ro', markersize=8)
             ax.text(x, y, sta_ids[i], color='white', fontsize=12, ha='right', va='bottom')
 
+        save_plot(fig, 'Py_spatial_migrated_result.png')
         plt.show()
 
         # Print summary statistics of the migrated result

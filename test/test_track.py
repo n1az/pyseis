@@ -162,7 +162,7 @@ def spatial_track(
             print(f"Processing time step {j+1}/{len(t_step)}...")
 
         with Pool(n_cpu) as pool:
-            results.append(pool.starmap(process_grid, [(d_i, model_fun, extra_params, t_0, data, window, verbose) 
+            results.append(pool.starmap(process_grid, [(d_i, model_fun, extra_params, t_0, data, window, v, verbose) 
                                                        for d_i in d if d_i[0] == 1]))
 
 
@@ -176,9 +176,9 @@ def spatial_track(
     return l_out
 
 # Update process_grid function to accept extra_params
-def process_grid(d_i, model_fun, extra_params, t_0, data, window, verbose):
+def process_grid(d_i, model_fun, extra_params, t_0, data, window, v, verbose):
     """Process a single grid point."""
-    t_shift = t_0 + timedelta(seconds=d_i[1:] / data[0]['meta']['v'])
+    t_shift = [t_0 + timedelta(seconds=d / v) for d in d_i[1:]]
     
     a_window = []
     for i, d in enumerate(data):
