@@ -245,6 +245,7 @@ data_df <- data.frame(t(data))
 colnames(data_df) <- paste0("Station_", 1:num_stations)
 data_df$Time <- 1:data_length
 
+"""
 x <- spatial_track(
     data = data_df,
     window = 3,
@@ -256,7 +257,7 @@ x <- spatial_track(
     qt = 0.99,
     dt = 2
     )
-
+"""
 ############### Modeling ###############
 
 ## model amplitude
