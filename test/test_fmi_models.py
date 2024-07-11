@@ -135,7 +135,7 @@ def main():
     plt.grid(True)
     plt.tight_layout()
     save_plot(plt.gcf(), 'Py_fmi_spectra.png')
-    plt.show()
+    plt.close()
 
     # Plot individual spectra
     for i, spectrum in enumerate(ref_spectra):
@@ -151,7 +151,7 @@ def main():
         plt.grid(True)
         plt.tight_layout()
         save_plot(plt.gcf(), f'Py_fmi_spectrum_{i+1}.png')
-        plt.show()
+        plt.close()
 
         # Save spectrum data to CSV
         save_csv(
@@ -197,7 +197,7 @@ def main():
     plt.xlabel('Time step')
     plt.ylabel('Frequency index')
     save_plot(plt.gcf(), 'Py_fmi_original.png')
-    plt.show()
+    plt.close()
 
     # Save synthetic spectrogram data to CSV
     save_csv(psd, 'Py_fmi_syn_spect.csv')
@@ -214,7 +214,7 @@ def main():
         plt.xlabel('Time step')
         plt.ylabel('Frequency index')
         save_plot(plt.gcf(), 'Py_fmi_rmse.png')
-        plt.show()
+        plt.close()
 
         # Save RMSE data to CSV
         save_csv(result['rmse'], 'Py_fmi_rmse.csv')

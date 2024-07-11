@@ -12,7 +12,9 @@ current_dir <- getwd()
 parent_dir <- dirname(current_dir)
 
 # Set the working directory to the parent directory
-setwd(parent_dir)
+setwd(current_dir)
+
+print(getwd())
 
 ############### FMI ###############
 
@@ -234,47 +236,69 @@ df_xy <- data.frame(x = c(10, 11), y = c(54, 55))
 spatial_convert(data = df_xy, from = proj_in, to = proj_out)
 write.csv(df_xy, file = "R/output/R_spatial_convert_set.csv")
 
-
+#print("spatial_track")
 # create artificial data set
 # Set seed for reproducibility
-set.seed(123)
+#set.seed(123)
 
 # Generate sample seismic data
-num_stations <- 3
-data_length <- 1000  # Length of the seismic signal data
-data <- matrix(
-  rnorm(num_stations * data_length),
-  nrow = num_stations,
-  ncol = data_length)
+#num_stations <- 3
+#data_length <- 1000  # Length of the seismic signal data
+#data <- matrix(
+#  rnorm(num_stations * data_length),
+#  nrow = num_stations,
+#  ncol = data_length)
 
 # Convert the data to a data frame for easier plotting
-data_df <- data.frame(t(data))
-colnames(data_df) <- paste0("Station_", 1:num_stations)
-data_df$Time <- 1:data_length
+#data_df <- data.frame(t(data))
+#colnames(data_df) <- paste0("Station_", 1:num_stations)
+#data_df$Time <- 1:data_length
 
-# """
-# x <- spatial_track(
-#     data = data_df,
-#     window = 3,
-#     overlap = 0.5,
-#     d_map = D$maps,
-#     v = 800,
-#     q = 40,
-#     f = 12,
-#     qt = 0.99,
-#     dt = 2
-#     )
-# """
+#x <- spatial_track(
+#    data = data_df,
+#    window = 3,
+#    overlap = 0.5,
+#    d_map = D$maps,
+#    v = 800,
+#    q = 40,
+#    f = 12,
+#    qt = 0.99,
+#    dt = 2
+#    )
+
 ############### Modeling ###############
 
+print("model")
 ## model amplitude
-model_amplitude(data = s,
-                source = c(500, 600),
-                d_map = D$maps,
-                v = 500,
-                q = 50,
-                f = 10)
-model_amplitude(data = s,
+## create synthetic DEM
+dem2 <- terra::rast(nrows = 20, ncols = 20,
+                  xmin = 0, xmax = 10000,
+                  ymin= 0, ymax = 10000,
+                  vals = rep(0, 400))
+
+## define station coordinates
+stations2 <- data.frame(x = c(1000, 9000, 5000, 9000),
+                        y = c(1000, 1000, 9000, 9000),
+                        ID = c("A", "B", "C", "D"))
+
+## create synthetic signal (source in towards lower left corner of the DEM)
+s2 <- rbind(dnorm(x = 1:1000, mean = 500, sd = 50) * 50,
+            dnorm(x = 1:1000, mean = 500, sd = 50) * 2,
+            dnorm(x = 1:1000, mean = 500, sd = 50) * 1,
+            dnorm(x = 1:1000, mean = 500, sd = 50) * 0.5)
+
+## calculate spatial distance maps and inter-station distances
+D2 <- eseis::spatial_distance(stations = stations2[,1:2], dem = dem2, verbose = TRUE)
+
+# spatial_distancce output as list but often needs to be raster
+#model_amplitude(data = s2,
+#                source = c(500, 600),
+#                d_map = D2$maps,
+#                v = 500,
+#                q = 50,
+#                f = 10)
+
+model_amplitude(data = s2,
                 distance = c(254, 8254, 9280, 11667),
                 model = "SurfBodySpreadAtten",
                 v = 500,
@@ -304,6 +328,7 @@ p_bedload <- model_bedload(d_s = 0.7,
 ## plot spectrum
 plot_spectrum(data = p_bedload,
                 ylim = c(-170, -110))
+
 ## define empiric grain-size distribution
 gsd_empiric <- data.frame(d = c(0.70, 0.82, 0.94, 1.06, 1.18, 1.30),
                             p = c(0.02, 0.25, 0.45, 0.23, 0.04, 0.00))

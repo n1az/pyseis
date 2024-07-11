@@ -142,7 +142,7 @@ if __name__ == "__main__":
             ax.set_xlabel('X coordinate')
             ax.set_ylabel('Y coordinate')
             save_plot(fig, 'Py_spatial_dist_0.png')
-            plt.show()
+            plt.close()
 
             print(f"Main code - DEM bounds: {dem.bounds}")
             print(f"Main code - Station coordinates:\n{sta}")
@@ -163,7 +163,7 @@ if __name__ == "__main__":
                          ha='center', va='center', color='white')
         plt.tight_layout()
         save_plot(fig, 'Py_spatial_dist_mat.png')
-        plt.show()
+        plt.close()
         
         # Save distance matrix to CSV
         save_csv(result['matrix'], 'distance_matrix.csv', headers=sta_ids)
@@ -181,7 +181,7 @@ if __name__ == "__main__":
                 axs[i].text(sta[i, 0], sta[i, 1], sta_ids[i], color='white', fontsize=12, ha='right', va='bottom')
         plt.tight_layout()
         save_plot(fig, 'distance_maps.png')
-        plt.show()
+        plt.close()
         
         # Create synthetic signal
         x = np.arange(1, 1001)
@@ -232,7 +232,7 @@ if __name__ == "__main__":
                 ax.set_ylabel('Y coordinate')
                 ax.legend()
                 save_plot(fig, 'Py_spatial_amp.png')
-                plt.show()
+                plt.close()
             else:
                 print("No maximum amplitude points found.")
 
@@ -302,7 +302,7 @@ if __name__ == "__main__":
 
         plt.tight_layout()
         save_plot(fig, 'Py_spatial_migration.png')
-        plt.show()
+        plt.close()
         
         # Save migrated and clipped data to CSV
         save_csv(migrated_data, 'Py_spatial_migrated_data.csv')
@@ -330,7 +330,7 @@ if __name__ == "__main__":
             ax.text(x, y, sta_ids[i], color='white', fontsize=12, ha='right', va='bottom')
 
         save_plot(fig, 'Py_spatial_migrated_result.png')
-        plt.show()
+        plt.close()
 
         # Print summary statistics of the migrated result
         print("\nMigrated data summary:")
