@@ -4,7 +4,6 @@
 
 rule all:
     input:
-        "clean.txt",
         "R_script.txt",
         "py_script_1.txt",
         "py_script_2.txt"
@@ -32,9 +31,9 @@ rule run_rscript:
     """
     input:
         script = "R/rscript.R",
-        clean = "clean.txt"
+        #clean = "clean.txt"
     output:
-        touch("R_script.txt")
+        touch(temp("R_script.txt"))
     run:
         import subprocess
 
@@ -47,9 +46,9 @@ rule run_python_script1:
     """
     input:
         script = "test/test_spatials.py",
-        clean = "clean.txt"
+        #clean = "clean.txt"
     output:
-        touch("py_script_1.txt")
+        touch(temp("py_script_1.txt"))
     run:
         import subprocess
 
@@ -62,9 +61,9 @@ rule run_python_script2:
     """
     input:
         script = "test/test_fmi_models.py",
-        clean = "clean.txt"
+        #clean = "clean.txt"
     output:
-        touch("py_script_2.txt")
+        touch(temp("py_script_2.txt"))
     run:
         import subprocess
 
