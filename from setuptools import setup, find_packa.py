@@ -1,0 +1,24 @@
+from setuptools import setup, find_packages
+
+setup(
+    name='pyseis',
+    version='0.1.0',
+    author='Frieder Emil Georg Tautz, Shahriar Shohid Choudhury, Md Niaz Morshed, Lamia Islam',
+    author_email='tautz1@uni-potsdam.de, choudhury@uni-potsdam.de, md.niaz.morshed@uni-potsdam.de,lamia.islam@uni-potsdam.de',
+    description='A comprehensive Python package for seismic data analysis and visualization.',
+    long_description=open('README.md').read(),
+    long_description_content_type='text/markdown',
+    url='https://gitup.uni-potsdam.de/tautz1/pyseis',
+    packages=find_packages(),
+    install_requires=[
+        'scipy',
+        'matplotlib',
+        'pandas'
+    ],
+    classifiers=[
+        'Programming Language :: Python :: 3',
+        'License :: OSI Approved :: MIT License',
+        'Operating System :: OS Independent',
+    ],
+    python_requires='>=3.11',
+)
