@@ -1,17 +1,11 @@
 <h1 align="center">Pyseis</h1>
 
-<!-- Status -->
-
-<h4 align="center"> 
-	🚧  Pyseis 🚀 Under construction...  🚧
-</h4> 
-
 <hr>
 
 <p align="center">
   <a href="#dart-project-overview">Overview</a> &#xa0; | &#xa0; 
   <a href="#sparkles-features">Features</a> &#xa0; | &#xa0;
-  <a href="#rocket-technologies">Technologies</a> &#xa0; | &#xa0;
+  <a href="#rocket-technologies">Tools</a> &#xa0; | &#xa0;
   <a href="#white_check_mark-requirements">Requirements</a> &#xa0; | &#xa0;
   <a href="#checkered_flag-starting">Starting</a> &#xa0; | &#xa0;
   <a href="#memo-license">License</a> &#xa0; | &#xa0;
@@ -20,11 +14,11 @@
 
 <br>
 
-# :dart: Project Overview #
+## :dart: Project Overview ##
 
 PySeis is a `Python` package for environmental seismology, a scientific field that studies the seismic signals emitted by Earth surface processes. This package provides a suite of tools to facilitate the reading, writing, preparation, analysis, and visualization of seismic data, drawing inspiration from the functionality of the [eseis](R/dietze2018_R_eseis.pdf) package in `R`. 
 
-## :question: Why Pyseis? ##
+## :question: Why Pyseis ##
 
 While the eseis package in `R` offers tools for seismological data analysis, there was a gap in equivalent functionality within the `Python` ecosystem. PySeis aims to bridge this gap by providing `Python` users with a comparable suite of tools, ensuring they can perform environmental seismology tasks efficiently within a `Python` environment.
 
@@ -38,13 +32,23 @@ While the eseis package in `R` offers tools for seismological data analysis, the
 :heavy_check_mark: Coordinate conversion\
 :heavy_check_mark: Source location detection\
 :heavy_check_mark: Source tracking\
-:heavy_check_mark: Spectrum modeling\
+:heavy_check_mark: Spectrum modeling
 
-## :rocket: Technologies ##
+## :rocket: Tools ##
 
 The following tools were used in this project:
 
 - [Python](https://www.python.org)
+- [NumPy](https://pypi.org/project/numpy/)
+- [Pandas](https://pypi.org/project/pandas/)
+- [Geopandas](https://pypi.org/project/geopandas/)
+- [Matplotlib](https://pypi.org/project/matplotlib/)
+- [Scipy](https://pypi.org/project/scipy/)
+- [Shapely](https://pypi.org/project/shapely/)
+- [Rasterio](https://pypi.org/project/rasterio/)
+
+
+
 
 ## :white_check_mark: Requirements ##
 
