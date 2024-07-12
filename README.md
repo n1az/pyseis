@@ -1,21 +1,5 @@
 <h1 align="center">Pyseis</h1>
 
-<p align="center">
-  <img alt="Github top language" src="https://img.shields.io/gitlab/languages/top/tautz1/pyseis?color=56BEB8">
-
-  <img alt="Github language count" src="https://img.shields.io/gitlab/languages/count/tautz1/pyseis?color=56BEB8">
-
-  <img alt="Repository size" src="https://img.shields.io/gitlab/repo-size/tautz1/pyseis?color=56BEB8">
-
-  <img alt="License" src="https://img.shields.io/gitlab/license/tautz1/pyseis?color=56BEB8">
-
-  <img alt="Github issues" src="https://img.shields.io/gitlab/issues/tautz1/pyseis?color=56BEB8" />
-
-  <!-- <img alt="Github forks" src="https://img.shields.io/github/forks/{{YOUR_GITHUB_USERNAME}}/pyseis?color=56BEB8" /> -->
-
-  <!-- <img alt="Github stars" src="https://img.shields.io/github/stars/{{YOUR_GITHUB_USERNAME}}/pyseis?color=56BEB8" /> -->
-</p>
-
 <!-- Status -->
 
 <h4 align="center"> 
@@ -38,17 +22,23 @@
 
 # :dart: Project Overview #
 
-Environmental seismology is a scientific field that studies the
-seismic signals, emitted by Earth surface processes. This package
-provides all relevant functions to read/write seismic data files, prepare,
-analyse and visualise seismic data, and generate reports of the processing
-history.
+PySeis is a `Python` package for environmental seismology, a scientific field that studies the seismic signals emitted by Earth surface processes. This package provides a suite of tools to facilitate the reading, writing, preparation, analysis, and visualization of seismic data, drawing inspiration from the functionality of the [eseis](R/dietze2018_R_eseis.pdf) package in `R`. 
+
+## :question: Why Pyseis? ##
+
+While the eseis package in `R` offers tools for seismological data analysis, there was a gap in equivalent functionality within the `Python` ecosystem. PySeis aims to bridge this gap by providing `Python` users with a comparable suite of tools, ensuring they can perform environmental seismology tasks efficiently within a `Python` environment.
 
 ## :sparkles: Features ##
 
-:heavy_check_mark: Signal Processing;\
-:heavy_check_mark: Signal Analysis;\
-:heavy_check_mark: Visualization;
+:heavy_check_mark: Fluvial data inversion\
+:heavy_check_mark: Reference model creation\
+:heavy_check_mark: Spatial distance calculation\
+:heavy_check_mark: Spatial signals migration\
+:heavy_check_mark: Spatial data clipping\
+:heavy_check_mark: Coordinate conversion\
+:heavy_check_mark: Source location detection\
+:heavy_check_mark: Source tracking\
+:heavy_check_mark: Spectrum modeling\
 
 ## :rocket: Technologies ##
 
