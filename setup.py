@@ -9,11 +9,7 @@ setup(
     long_description_content_type='text/markdown',
     url='https://gitup.uni-potsdam.de/tautz1/pyseis',
     packages=find_packages(),
-    install_requires=[
-        'scipy',
-        'matplotlib',
-        'pandas'
-    ],
+    install_requires=parse_requirements('requirements.txt'),  # Read dependencies from requirements.txt
     classifiers=[
         'Programming Language :: Python :: 3',
         'License :: OSI Approved :: MIT License',
