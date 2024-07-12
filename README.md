@@ -7,7 +7,7 @@
   <a href="#white_check_mark-installation">Installation</a> &#xa0; | &#xa0;
   <a href="#memo-license">License</a> &#xa0; | &#xa0;
   <a href="#black_nib-citation">Citation</a> &#xa0; | &#xa0;
-  <a href="#notebook_with_decorative_cover-contributing-to-Pyseis">Contributing to Pyseis</a> &#xa0; | &#xa0;
+  <a href="#notebook_with_decorative_cover-contributing-to-pyseis">Contributions</a> &#xa0; | &#xa0;
 </p>
 
 
@@ -82,11 +82,11 @@ If you use this software, please cite it using [this](CITATION.cff) file.
 
 All contributions, bug reports, bug fixes, documentation improvements, enhancements, and ideas are welcome.
 
-A detailed overview on how to contribute can be found in the [contributing guide](CONTRIBUTING.md).
+A detailed overview on how to contribute can be found in the [contributing guide](CONTRIBUTING.md). Feel free to create new issues and start working on it!
 
-Feel free to create new issues and start working on it!
+As contributors and maintainers to this project, you are expected to abide by Pyseis' code of conduct. 
 
-As contributors and maintainers to this project, you are expected to abide by Pyseis' code of conduct. More information can be found at: [Code of Conduct](CONDUCT.md)
+More information can be found at: [Code of Conduct](CONDUCT.md)
 
 &#xa0;
 
