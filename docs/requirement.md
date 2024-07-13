@@ -60,12 +60,35 @@ In this section, we identify and select specific components from the existing es
 Each team member will be responsible for translating specific components from R to Python. The components are divided among the members as follows:
 
 
-| Member    | Components Worked On                            | Steps Involved                                                  |
-|-----------|-------------------------------------------------|-----------------------------------------------------------------|
-| Frieder | fmi_inversion, fmi_parameters, fmi_spectra | Translation, Unit Testing, Output Generation, Output Comparison |
-| Niaz  | spatial_distance, spatial_migrate, spatial_amplitude | Translation, Unit Testing, Output Generation, Output Comparison |
-| Lamia  | spatial_clip, spatial_convert, spatial_pmax       | Translation, Unit Testing, Output Generation, Output Comparison |
-| Shahriar  | spatial_track, model_bedload, model_turbulence | Translation, Unit Testing, Output Generation, Output Comparison |
+<table border="1">
+  <tr>
+    <th>Member</th>
+    <th>Components Worked On</th>
+    <th>Steps Involved</th>
+  </tr>
+  <tr>
+    <td>Frieder</td>
+    <td>fmi_inversion, fmi_parameters, fmi_spectra</td>
+    <td rowspan="4">
+      1. Translation <br> 
+      2. Unit Testing <br> 
+      3. Integration Testing <br> 
+      4. Output Comparison <br>
+  </tr>
+  <tr>
+    <td>Niaz</td>
+    <td>spatial_distance, spatial_migrate, spatial_amplitude</td>
+  </tr>
+  <tr>
+    <td>Lamia</td>
+    <td>spatial_clip, spatial_convert, spatial_pmax</td>
+  </tr>
+  <tr>
+    <td>Shahriar</td>
+    <td>spatial_track, model_bedload, model_turbulence</td>
+  </tr>
+</table>
+
 
 
 
