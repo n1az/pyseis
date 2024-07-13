@@ -1,0 +1,82 @@
+# Snakefile
+
+import os
+import sys
+from snakemake.utils import min_version
+
+# Set minimum Snakemake version
+min_version("6.0")
+
+# Configuration
+R_SCRIPTS = ["rscript"]
+PY_SCRIPTS = ["test_spatials", "test_fmi_models"]
+NB_FILES = ["analysis"]
+
+# Output directory
+OUTPUT_DIR = "output"
+
+rule all:
+    input:
+        expand(f"{OUTPUT_DIR}/R_{{script}}.txt", script=R_SCRIPTS),
+        expand(f"{OUTPUT_DIR}/py_{{script}}.txt", script=PY_SCRIPTS),
+        expand(f"{OUTPUT_DIR}/{{notebook}}.html", notebook=NB_FILES)
+
+rule clean:
+    output:
+        touch(temp(f"{OUTPUT_DIR}/.cleaned"))
+    run:
+        import glob
+        patterns = [f"{OUTPUT_DIR}/R_*.txt", f"{OUTPUT_DIR}/py_*.txt", f"{OUTPUT_DIR}/*.html"]
+        for pattern in patterns:
+            for file in glob.glob(pattern):
+                os.remove(file)
+                print(f"Removed: {file}")
+
+rule run_rscript:
+    input:
+        script = "R/{script}.R",
+        cleaned = f"{OUTPUT_DIR}/.cleaned"
+    output:
+        touch(temp(f"{OUTPUT_DIR}/R_{{script}}.txt"))
+    shell:
+        "Rscript {input.script}"
+
+rule run_python_script:
+    input:
+        script = "test/{script}.py",
+        cleaned = f"{OUTPUT_DIR}/.cleaned"
+    output:
+        touch(temp(f"{OUTPUT_DIR}/py_{{script}}.txt"))
+    shell:
+        "python {input.script}"
+
+rule run_jupyter_notebook:
+    input:
+        notebook = "docs/{notebook}.ipynb",
+        r_scripts = expand(f"{OUTPUT_DIR}/R_{{script}}.txt", script=R_SCRIPTS),
+        py_scripts = expand(f"{OUTPUT_DIR}/py_{{script}}.txt", script=PY_SCRIPTS)
+    output:
+        html = f"{OUTPUT_DIR}/{{notebook}}.html"
+    run:
+        import subprocess
+
+        os.makedirs(OUTPUT_DIR, exist_ok=True)
+
+        # Execute the notebook
+        subprocess.run([
+            sys.executable, "-m", "jupyter", "nbconvert", 
+            "--to", "notebook", 
+            "--execute",
+            "--inplace",
+            input.notebook
+        ], check=True)
+
+        # Convert to HTML
+        subprocess.run([
+            sys.executable, "-m", "jupyter", "nbconvert", 
+            "--to", "html", 
+            "--no-input",
+            f"--output-dir={OUTPUT_DIR}",
+            f"--output={os.path.basename(output.html)}",
+            input.notebook
+        ], check=True)
