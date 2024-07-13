@@ -7,36 +7,39 @@ The data analysis workflow is designed to facilitate the translation and validat
 
 ### UML Activity Diagram
 
-Below is the PlantUML code for the described activity diagram, incorporating the loop back to the translation step using the `repeat` syntax:
-
-![Activity Diagram](diagram_updated.png)
+![Activity Diagram](ActivityDiagram.png)
 
 
 ### Component Selection
-Identify and select specific components from the existing `eseis` package, which is used for seismological data analysis in R. We only selected the components which are not currently available in Python.
+Identify and select specific components from the existing `eseis` package, which are not currently available in Python.
 
 ### Translation to Python
-Translate the selected R components into Python, ensuring that the functionality and logic of the original components are preserved.
+Translate the selected R components into Python, ensuring that the functionality and logic of the original components are preserved. For details on which components each member is responsible for, see the [Task Distribution](#task-distribution) section.
 
 ### Unit Testing
 Conduct unit testing on the translated Python components to verify their correctness and ensure they perform as expected.
 
 ### Output Generation
-Generate outputs using both the translated Python components and the original R components. This step is performed in parallel to maintain efficiency.
+Generate outputs using both the translated Python components and the original R components. 
 
 ### Output Comparison
-Compare the outputs generated from the Python and R implementations to check for consistency and accuracy.
+Compare the outputs generated from the Python implementations and R to check for consistency and accuracy.
 
 ### Validation Decision
-Evaluate whether the outputs from both implementations match:
-- **If the outputs match**: The workflow concludes successfully, indicating that the translated Python components are functionally equivalent to the original R components.
-- **If the outputs do not match**: Debug the translated components, identify discrepancies, and reiterate the translation process until the outputs match.
+Evaluate the outputs from Python with R:
+- **If the outputs are valid**: Go to the Analyze step indicating that the Python components are functionally equivalent to the original R components.
+- **If the outputs are not valid**: Debug and reiterate from translate step.
 
 ### Debug and Reiterate
 If discrepancies are found during the output comparison, debug the translated Python components. This involves analyzing the differences, correcting any issues, and repeating the translation and validation steps until consistency is achieved.
 
+### Analyze Data
+Present the outputs from both the Python and R side-by-side in a Jupyter Notebook (.ipynb file).
+
+
+
 ## Component Analysis
-In this section, we identify and select specific components from the existing eseis package, which is used for seismological data analysis in R. We have focused on translating components that are not currently available in Python. The table below lists these components, detailing their operations, inputs, outputs, and implementation. 
+In this section, we identify and select specific components from the existing eseis package, which are not currently available in Python. The table below lists these components, detailing their operations, inputs, outputs, and implementation. 
 
 | Component         | Operation                                                        | Input(s)                                                                                                                           | Output(s)                                               | Implementation                              |
 | ----------------- | ---------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- | ------------------------------------------- |
@@ -52,6 +55,19 @@ In this section, we identify and select specific components from the existing es
 | spatial_track     | Track a spatially mobile seismic source                          | seismic signals, coupling efficiency, time window, distance maps, area of interest, velocity, quality factor, frequency, CPUs, verbose flag | list object with summarising statistics of the fits     | Available in R package (eseis), to be translated to Python       |
 | model_bedload     | Model the seismic spectrum due to bedload transport in rivers    | grain-size distribution, sediment parameters, fluid flow parameters, frequency range, distance to source, reference frequency, quality factor, Rayleigh wave parameters | eseis object containing the modelled spectrum           | Available in R package (eseis), to be translated to Python       |
 | model_turbulence  | Model the seismic spectrum due to hydraulic turbulence           | sediment parameters, fluid flow parameters, frequency range, distance to source, reference frequency, quality factor, Rayleigh wave parameters | eseis object containing the modelled spectrum           | Available in R package (eseis), to be translated to Python       |
+
+### Task Distribution
+Each team member will be responsible for translating specific components from R to Python. The components are divided among the members as follows:
+
+
+| Member    | Components Worked On                            | Steps Involved                                                  |
+|-----------|-------------------------------------------------|-----------------------------------------------------------------|
+| Frieder | fmi_inversion, fmi_parameters, fmi_spectra | Translation, Unit Testing, Output Generation, Output Comparison |
+| Niaz  | spatial_distance, spatial_migrate, spatial_amplitude | Translation, Unit Testing, Output Generation, Output Comparison |
+| Lamia  | spatial_clip, spatial_convert, spatial_pmax       | Translation, Unit Testing, Output Generation, Output Comparison |
+| Shahriar  | spatial_track, model_bedload, model_turbulence | Translation, Unit Testing, Output Generation, Output Comparison |
+
+
 
 ## Non-Functional Requirements
 1. **Performance**
@@ -70,5 +86,5 @@ In this section, we identify and select specific components from the existing es
    - The package should be modular to facilitate updates and maintenance.
 6. **Compatibility**
    - The package should be compatible with major operating systems (Windows, macOS, Linux).
-   - It should support integration with other scientific Python libraries (e.g., NumPy, SciPy, Matplotlib).
+   - It should support integration with other scientific Python libraries.
 ---
