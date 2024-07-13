@@ -20,8 +20,8 @@ print(getwd())
 
 ## create 100 example reference parameter sets
 ref_pars <- fmi_parameters(n = 10,
-                            h_w = c(0.02, 1.20),
-                            q_s = c(0.001, 8.000) / 2650,
+                            h_w = c(0.02, 2.00),
+                            q_s = c(0.001, 50.000) / 2650,
                             d_s = 0.01,
                             s_s = 1.35,
                             r_s = 2650,
