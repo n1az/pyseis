@@ -29,8 +29,7 @@ def spatial_track(data, coordinates, distance_map, sampling_rate, max_lag, time_
     Returns:
     dict
         Dictionary containing the mean and standard deviation of the tracked source coordinates, amplitude, and variance reduction over time.
-    
-    Author: Shahriar Shohid Choudhury
+
     """
 
     def cross_correlation(x, y, max_lag):

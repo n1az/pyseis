@@ -25,7 +25,6 @@ def spatial_migrate(data, d_stations, d_map, v, dt, snr=None, normalise=True, ve
     Returns:
     rasterio.io.DatasetReader: A raster with Gaussian probability density function values for each grid cell.
 
-    Author: Md Niaz Morshed
     """
     # Check/set data structure
     if not isinstance(data, np.ndarray):

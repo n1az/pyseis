@@ -17,7 +17,6 @@ def spatial_clip(data, quantile, replace=np.nan, normalise=True):
     Returns:
     rasterio.io.DatasetReader: Data set with clipped values.
 
-    Author: Lamia Islam
     """
     # Check/set parameters
     if quantile is None:

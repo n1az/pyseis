@@ -43,7 +43,6 @@ def spatial_amplitude(data, coupling, d_map, aoi=None, v=None, q=None, f=None, a
     Returns:
     rasterio.io.MemoryFile: A raster with the location output metrics for each grid cell.
 
-    Author: Md Niaz Morshed
     """
     # Debugging: Print shapes and types of input data
     print(f"Data shape: {np.array(data).shape}")

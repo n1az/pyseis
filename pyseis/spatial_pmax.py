@@ -17,7 +17,6 @@ def spatial_pmax(data):
     >>> spatial_pmax(data)
     array(...)  # Coordinates of the maximum value(s) in the data
 
-    Author: Lamia Islam
     """
     if isinstance(data, rasterio.io.MemoryFile):
         with data.open() as dataset:

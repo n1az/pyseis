@@ -14,7 +14,6 @@ def spatial_convert(data, from_proj, to_proj):
     Returns:
     numpy.ndarray: Converted coordinates.
 
-    Author: Lamia Islam
 
     Examples:
     >>> xy = np.array([13, 55])
