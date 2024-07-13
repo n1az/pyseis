@@ -6,7 +6,7 @@ authors:
   - family-names: Islam
     given-names: Lamia
   - family-names: Morshed
-    given-names: Niaz
+    given-names: Md Niaz
   - family-names: Choudhury
     given-names: Shahriar Shohid
 title: "Pyseis - contributing to environmental seismology data analysis in python"
