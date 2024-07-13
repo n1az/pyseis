@@ -59,12 +59,14 @@ In this section, we identify and select specific components from the existing es
 ### Task Distribution
 Each team member will be responsible for translating specific components from R to Python. The components are divided among the members as follows:
 
-| Member        | Components Assigned                        |
-| ------------- | ------------------------------------------ |
-| Frieder       | fmi_inversion, fmi_parameters, fmi_spectra |
-| Niaz          | spatial_distance, spatial_migrate, spatial_amplitude |
-| Lamia         | spatial_clip, spatial_convert, spatial_pmax |
-| Shahriar      | spatial_track, model_bedload, model_turbulence   |
+
+| Member    | Components Worked On                            | Steps Involved                                                  |
+|-----------|-------------------------------------------------|-----------------------------------------------------------------|
+| Frieder | fmi_inversion, fmi_parameters, fmi_spectra | Translation, Unit Testing, Output Generation, Output Comparison |
+| Niaz  | spatial_distance, spatial_migrate, spatial_amplitude | Translation, Unit Testing, Output Generation, Output Comparison |
+| Lamia  | spatial_clip, spatial_convert, spatial_pmax       | Translation, Unit Testing, Output Generation, Output Comparison |
+| Shahriar  | spatial_track, model_bedload, model_turbulence | Translation, Unit Testing, Output Generation, Output Comparison |
+
 
 
 ## Non-Functional Requirements
