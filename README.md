@@ -51,20 +51,20 @@ The following tools were used in this project:
 
 Before starting :checkered_flag:, you need to have [Git](https://git-scm.com) and [Python](https://www.python.org) installed.
 
-## :checkered_flag: Starting ##
 
 ```bash
 # Clone this project
-$ git clone https://github.com/{{YOUR_GITHUB_USERNAME}}/pyseis
+$ git clone https://gitup.uni-potsdam.de/tautz1/pyseis.git
 
 # Access
 $ cd pyseis
 
-# Install dependencies
-$ pip install -r requirements.txt
+# Activate your virtual environment (optional)
+# Install the pyseis package
+$ pip install -e .
 
-# Run the project
-$ python pyseis.py
+# To see the data analysis workflow, install snakemake and run
+$ snakemake -j 1 --latency-wait 60
 
 ```
 
