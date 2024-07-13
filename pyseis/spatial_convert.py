@@ -2,6 +2,7 @@ import numpy as np
 import rasterio
 from rasterio.warp import transform
 
+
 def spatial_convert(data, from_proj, to_proj):
     """
     Convert coordinates between reference systems.
@@ -34,14 +35,18 @@ def spatial_convert(data, from_proj, to_proj):
         elif data.ndim == 2 and data.shape[1] == 2:
             data = data
         else:
-            raise ValueError("Coordinate data must contain only 2 values (x and y) or 2 columns (x and y)!")
+            raise ValueError(
+                "Coordinate data must contain only 2 values (x and y) or 2 columns (x and y)!"
+            )
     elif isinstance(data, list):
         if len(data) == 2:
             data = np.array([data])
         elif len(data) > 2 and all(len(coord) == 2 for coord in data):
             data = np.array(data)
         else:
-            raise ValueError("Coordinate data must contain only 2 values (x and y) or 2 columns (x and y)!")
+            raise ValueError(
+                "Coordinate data must contain only 2 values (x and y) or 2 columns (x and y)!"
+            )
     else:
         raise ValueError("Input data must be a numpy.ndarray or a list!")
 

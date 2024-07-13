@@ -1,6 +1,7 @@
 import numpy as np
 import rasterio
 
+
 def spatial_pmax(data):
     """
     Get the most likely source location.
@@ -26,7 +27,9 @@ def spatial_pmax(data):
         data_array = data
         transform = None
     else:
-        raise ValueError("Input data must be either a numpy array or a rasterio MemoryFile")
+        raise ValueError(
+            "Input data must be either a numpy array or a rasterio MemoryFile"
+        )
 
     # Get the indices of the maximum value(s) in the data
     max_indices = np.unravel_index(np.argmax(data_array), data_array.shape)
@@ -40,6 +43,7 @@ def spatial_pmax(data):
         max_locations = [np.array(max_indices)]
 
     return max_locations
+
 
 # Example
 if __name__ == "__main__":
@@ -56,17 +60,17 @@ if __name__ == "__main__":
 
     with MemoryFile() as memfile:
         with memfile.open(
-            driver='GTiff',
+            driver="GTiff",
             height=100,
             width=100,
             count=1,
             dtype=np.float32,
-            crs='+proj=latlong',
-            transform=from_origin(0, 0, 1, 1)
+            crs="+proj=latlong",
+            transform=from_origin(0, 0, 1, 1),
         ) as dataset:
             data = np.random.rand(100, 100).astype(np.float32)
             dataset.write(data, 1)
-        
+
         max_locations = spatial_pmax(memfile)
         print("\nMost likely source location(s) for rasterio MemoryFile:")
         for loc in max_locations:

@@ -5,7 +5,10 @@ from rasterio import features
 from shapely.geometry import Point, LineString
 from rasterio.io import MemoryFile
 
-def spatial_migrate(data, d_stations, d_map, v, dt, snr=None, normalise=True, verbose=False):
+
+def spatial_migrate(
+    data, d_stations, d_map, v, dt, snr=None, normalise=True, verbose=False
+):
     """
     Migrate signals of a seismic event through a grid of locations.
 
@@ -30,7 +33,7 @@ def spatial_migrate(data, d_stations, d_map, v, dt, snr=None, normalise=True, ve
     if not isinstance(data, np.ndarray):
         if isinstance(data, list):
             # Extract sampling period from first object
-            dt = data[0].meta.get('dt', None)
+            dt = data[0].meta.get("dt", None)
 
             if dt is None:
                 raise ValueError("Signal object seems to contain no valid data!")
@@ -49,10 +52,14 @@ def spatial_migrate(data, d_stations, d_map, v, dt, snr=None, normalise=True, ve
         raise ValueError("Station distance matrix must be symmetric!")
 
     if not isinstance(d_map, list):
-        raise ValueError("Distance maps must be a list of raster metadata dictionaries!")
+        raise ValueError(
+            "Distance maps must be a list of raster metadata dictionaries!"
+        )
 
     if not isinstance(v, (float, rasterio.io.DatasetReader)):
-        raise ValueError("Velocity must be a numeric value or a rasterio.io.DatasetReader object!")
+        raise ValueError(
+            "Velocity must be a numeric value or a rasterio.io.DatasetReader object!"
+        )
 
     # Assign SNR values for normalization
     if normalise and snr is None:
@@ -85,7 +92,14 @@ def spatial_migrate(data, d_stations, d_map, v, dt, snr=None, normalise=True, ve
     # Build raster objects from map metadata
     with rasterio.Env():
         try:
-            d_map = [d_map[i] if isinstance(d_map[i], rasterio.io.DatasetReader) else rasterio.open(d_map[i]) for i in range(len(d_map))]
+            d_map = [
+                (
+                    d_map[i]
+                    if isinstance(d_map[i], rasterio.io.DatasetReader)
+                    else rasterio.open(d_map[i])
+                )
+                for i in range(len(d_map))
+            ]
         except Exception as e:
             print(f"Error opening distance maps: {e}")
             raise
@@ -98,7 +112,7 @@ def spatial_migrate(data, d_stations, d_map, v, dt, snr=None, normalise=True, ve
         maps_sum = None
         for pair in pairs:
             # Calculate cross-correlation function
-            cc = correlate(data[pair[0]], data[pair[1]], mode='full')
+            cc = correlate(data[pair[0]], data[pair[1]], mode="full")
             lags = np.arange(-cc.size // 2 + 1, cc.size // 2 + 1) * dt
 
             # Collect/transform velocity value(s)
