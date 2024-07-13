@@ -1,12 +1,13 @@
-# snakefile
+# Snakefile
 
-## Define the order of execution
+# Define input files
+R_SCRIPTS = ["rscript"]
+PY_SCRIPTS = ["test_spatials", "test_fmi_models"]
 
 rule all:
     input:
-        "R_script.txt",
-        "py_script_1.txt",
-        "py_script_2.txt"
+        expand("output/R_{script}.txt", script=R_SCRIPTS),
+        expand("output/py_{script}.txt", script=PY_SCRIPTS)
 
 rule clean:
     """
@@ -16,54 +17,41 @@ rule clean:
         touch("clean.txt")
     run:
         import os
+        import glob
 
-        # Define files to be cleaned based on rule all inputs
-        files_to_clean = ["R_script.txt", "py_script_1.txt", "py_script_2.txt"]
+        # Define patterns to clean
+        patterns_to_clean = ["output/R_*.txt", "output/py_*.txt"]
 
-        for file in files_to_clean:
-            if os.path.exists(file):
-                os.remove(file)
-                print(f"Removed: {file}")
+        for pattern in patterns_to_clean:
+            for file in glob.glob(pattern):
+                if os.path.exists(file):
+                    os.remove(file)
+                    print(f"Removed: {file}")
 
 rule run_rscript:
     """
     Rule to run the R script
     """
     input:
-        script = "R/rscript.R",
-        #clean = "clean.txt"
+        script = "R/{script}.R",
+        clean = "clean.txt"
     output:
-        touch(temp("R_script.txt"))
+        touch(temp("output/R_{script}.txt"))
     run:
         import subprocess
 
         r_command = f"Rscript {input.script}"
         subprocess.run(r_command, shell=True, check=True)
 
-rule run_python_script1:
+rule run_python_script:
     """
-    Rule to run the test_spatial script
-    """
-    input:
-        script = "test/test_spatials.py",
-        #clean = "clean.txt"
-    output:
-        touch(temp("py_script_1.txt"))
-    run:
-        import subprocess
-
-        py_command = f"python {input.script}"
-        subprocess.run(py_command, shell=True, check=True)
-
-rule run_python_script2:
-    """
-    Rule to run the fmi_models script
+    Rule to run Python scripts
     """
     input:
-        script = "test/test_fmi_models.py",
-        #clean = "clean.txt"
+        script = "test/{script}.py",
+        clean = "clean.txt"
     output:
-        touch(temp("py_script_2.txt"))
+        touch(temp("output/py_{script}.txt"))
     run:
         import subprocess
 
