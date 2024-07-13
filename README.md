@@ -4,10 +4,10 @@
   <a href="#dart-project-overview">Overview</a> &#xa0; | &#xa0; 
   <a href="#sparkles-features">Features</a> &#xa0; | &#xa0;
   <a href="#rocket-tools">Tools</a> &#xa0; | &#xa0;
-  <a href="#white_check_mark-requirements">Requirements</a> &#xa0; | &#xa0;
-  <a href="#checkered_flag-starting">Starting</a> &#xa0; | &#xa0;
+  <a href="#white_check_mark-installation">Installation</a> &#xa0; | &#xa0;
   <a href="#memo-license">License</a> &#xa0; | &#xa0;
   <a href="#black_nib-citation">Citation</a> &#xa0; | &#xa0;
+  <a href="#notebook_with_decorative_cover-contributing-to-pyseis">Contributions</a> &#xa0; | &#xa0;
 </p>
 
 
@@ -47,7 +47,7 @@ The following tools were used in this project:
 
 
 
-## :white_check_mark: Requirements ##
+## :white_check_mark: Installation ##
 
 Before starting :checkered_flag:, you need to have [Git](https://git-scm.com) and [Python](https://www.python.org) installed.
 
@@ -70,17 +70,23 @@ $ python pyseis.py
 
 ## :memo: License ##
 
-This project is under license from MIT. For more details, see the [LICENSE](LICENSE) file.
+[MIT](LICENSE)
 
 ## :black_nib: Citation ##
 
 If you use this software, please cite it using [this](CITATION.cff) file.
 
-## :memo: Code of Conduct & Contribution Guidelines ##
+## :notebook_with_decorative_cover: Contributing to Pyseis ##
 
-To find out about Code of Conduct, please see [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](CONDUCT.md)
+[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](CONDUCT.md)
 
-Please check [here](CONTRIBUTING.md) to know the contribution guidelines.
+All contributions, bug reports, bug fixes, documentation improvements, enhancements, and ideas are welcome.
+
+A detailed overview on how to contribute can be found in the [contributing guide](CONTRIBUTING.md). Feel free to create new issues and start working on it!
+
+As contributors and maintainers to this project, you are expected to abide by Pyseis' code of conduct. 
+
+More information can be found at: [Code of Conduct](CONDUCT.md)
 
 &#xa0;
 
