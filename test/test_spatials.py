@@ -106,8 +106,10 @@ if __name__ == "__main__":
 
     print("Original station coordinates:")
     print(sta)
+    save_csv(sta, 'Py_original_stations.csv')
     print("\nConverted station coordinates:")
     print(converted_sta)
+    save_csv(converted_sta, 'Py_converted_stations.csv')
 
     # Create and save synthetic DEM
     dem_filepath = create_dem(0, 100, 0, 100, res=(1, 1), filepath='synthetic_dem_0.tif')
@@ -209,6 +211,7 @@ if __name__ == "__main__":
         # Get most likely location coordinates
         e_max_list = spatial_pmax.spatial_pmax(e)
         print("e_max_list:", e_max_list)
+        save_csv(e_max_list, 'Py_pmax.csv')
 
         # Plot output
         fig, ax = plt.subplots(figsize=(10, 10))
@@ -247,7 +250,7 @@ if __name__ == "__main__":
         data = np.array(data)
         
         # Save synthetic seismic signals to CSV
-        save_csv(data.T, 'synthetic_seismic_signals.csv', headers=sta_ids)
+        save_csv(data.T, 'Py_synth_seis_signals.csv', headers=sta_ids)
 
         # Set parameters for spatial_migrate
         v = 3000.0  # Velocity in m/s (as float)
@@ -270,43 +273,46 @@ if __name__ == "__main__":
         clipped_result = spatial_clip.spatial_clip(migrated_result, quantile=0.75, replace=np.nan, normalise=True)
 
         # Plot the clipped migrated result
-        fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(20, 10))
+        fig, ax = plt.subplots(figsize=(10, 10))
 
         # Original migrated result
         migrated_data = migrated_result.read(1)
-        im1 = ax1.imshow(migrated_data, extent=(dem_bounds.left, dem_bounds.right, dem_bounds.bottom, dem_bounds.top), 
+        im1 = ax.imshow(migrated_data, extent=(dem_bounds.left, dem_bounds.right, dem_bounds.bottom, dem_bounds.top), 
                         origin='lower', cmap='viridis')
-        plt.colorbar(im1, ax=ax1, label='Migration Value')
-        ax1.set_title('Original Spatial Migration Result')
-        ax1.set_xlabel('X coordinate')
-        ax1.set_ylabel('Y coordinate')
+        plt.colorbar(im1, ax=ax, label='Migration Value')
+        ax.set_title('Original Spatial Migration Result')
+        ax.set_xlabel('X coordinate')
+        ax.set_ylabel('Y coordinate')
 
         # Plot station locations on original result
         for i, (x, y) in enumerate(sta):
-            ax1.plot(x, y, 'ro', markersize=8)
-            ax1.text(x, y, sta_ids[i], color='white', fontsize=12, ha='right', va='bottom')
+            ax.plot(x, y, 'ro', markersize=8)
+            ax.text(x, y, sta_ids[i], color='white', fontsize=12, ha='right', va='bottom')
+        save_plot(fig, 'Py_spatial_migration.png')
+        plt.close()
 
+        fig, ax = plt.subplots(figsize=(10, 10))
         # Clipped migrated result
         clipped_data = clipped_result.read(1)
-        im2 = ax2.imshow(clipped_data, extent=(dem_bounds.left, dem_bounds.right, dem_bounds.bottom, dem_bounds.top), 
+        im2 = ax.imshow(clipped_data, extent=(dem_bounds.left, dem_bounds.right, dem_bounds.bottom, dem_bounds.top), 
                         origin='lower', cmap='viridis')
-        plt.colorbar(im2, ax=ax2, label='Clipped Migration Value')
-        ax2.set_title('Clipped Spatial Migration Result (75th percentile)')
-        ax2.set_xlabel('X coordinate')
-        ax2.set_ylabel('Y coordinate')
+        plt.colorbar(im2, ax=ax, label='Clipped Migration Value')
+        ax.set_title('Clipped Spatial Migration Result (75th percentile)')
+        ax.set_xlabel('X coordinate')
+        ax.set_ylabel('Y coordinate')
 
         # Plot station locations on clipped result
         for i, (x, y) in enumerate(sta):
-            ax2.plot(x, y, 'ro', markersize=8)
-            ax2.text(x, y, sta_ids[i], color='white', fontsize=12, ha='right', va='bottom')
+            ax.plot(x, y, 'ro', markersize=8)
+            ax.text(x, y, sta_ids[i], color='white', fontsize=12, ha='right', va='bottom')
 
         plt.tight_layout()
-        save_plot(fig, 'Py_spatial_migration.png')
+        save_plot(fig, 'Py_spatial_clipped.png')
         plt.close()
         
         # Save migrated and clipped data to CSV
         save_csv(migrated_data, 'Py_spatial_migrated_data.csv')
-        save_csv(clipped_data, 'Py_spatial_clipped_migrated_data.csv')
+        save_csv(clipped_data, 'Py_spatial_clipped_data.csv')
 
         # Print summary statistics of the clipped result
         print("\nClipped migrated data summary:")
@@ -314,23 +320,6 @@ if __name__ == "__main__":
         print(f"Max value: {np.nanmax(clipped_data)}")
         print(f"Mean value: {np.nanmean(clipped_data)}")
 
-        # Plot the migrated result
-        fig, ax = plt.subplots(figsize=(10, 10))
-        migrated_data = migrated_result.read(1)
-        im = ax.imshow(migrated_data, extent=(dem_bounds.left, dem_bounds.right, dem_bounds.bottom, dem_bounds.top), 
-                       origin='lower', cmap='viridis')
-        plt.colorbar(im, label='Migration Value')
-        ax.set_title('Spatial Migration Result')
-        ax.set_xlabel('X coordinate')
-        ax.set_ylabel('Y coordinate')
-
-        # Plot station locations
-        for i, (x, y) in enumerate(sta):
-            ax.plot(x, y, 'ro', markersize=8)
-            ax.text(x, y, sta_ids[i], color='white', fontsize=12, ha='right', va='bottom')
-
-        save_plot(fig, 'Py_spatial_migrated_result.png')
-        plt.close()
 
         # Print summary statistics of the migrated result
         print("\nMigrated data summary:")
