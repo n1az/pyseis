@@ -1,4 +1,4 @@
-from setuptools import setup, find_packages
+from setuptools import setup
 
 # Function to read the requirements from requirements.txt
 def read_requirements(file):
@@ -14,7 +14,7 @@ setup(
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown',
     url='https://gitup.uni-potsdam.de/tautz1/pyseis',
-    packages=find_packages(),
+    packages=['pyseis'],
     install_requires=read_requirements('requirements.txt'),  # Read dependencies from requirements.txt
     classifiers=[
         'Programming Language :: Python :: 3',

@@ -1,13 +1,10 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import os
-import sys
 import csv
-from datetime import datetime
 
-# Add the parent directory to the path to import custom functions
+# Create output directory path
 script_directory = os.path.dirname(os.path.realpath(__file__))
-sys.path.append(os.path.join(script_directory, ".."))
 output_dir = os.path.join(script_directory, "output")
 os.makedirs(output_dir, exist_ok=True)
 

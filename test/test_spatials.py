@@ -5,11 +5,7 @@ import rasterio
 from rasterio.transform import from_origin
 from rasterio.io import MemoryFile
 import os
-import sys
 
-# Add the parent directory to the path to import custom functions
-script_directory = os.path.dirname(os.path.realpath(__file__))
-sys.path.append(os.path.join(script_directory, ".."))
 
 from pyseis import (
     spatial_distance,
