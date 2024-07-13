@@ -153,13 +153,6 @@ def main():
         save_plot(plt.gcf(), f'Py_fmi_spectrum_{i+1}.png')
         plt.close()
 
-        # Save spectrum data to CSV
-        save_csv(
-            list(zip(spectrum['frequency'], spectrum['power'], spectrum['turbulence'], spectrum['bedload'])),
-            f'Py_fmi_spectrum_{i+1}.csv',
-            headers=['Frequency', 'Power', 'Turbulence', 'Bedload']
-        )
-
     # Define water level and bedload flux time series
     h = np.array([0.01, 1.00, 0.84, 0.60, 0.43, 0.32, 0.24, 0.18, 0.14, 0.11])
     q = np.array([0.05, 5.00, 4.18, 3.01, 2.16, 1.58, 1.18, 0.89, 0.69, 0.54]) / 2650
@@ -189,35 +182,27 @@ def main():
 
     psd = np.column_stack([calculate_psd(hq_pair) for hq_pair in hq])
 
-    # Plot synthetic spectrogram
-    plt.figure(figsize=(10, 5))
-    plt.imshow(psd, aspect='auto', origin='lower', cmap='viridis')
-    plt.colorbar(label='PSD (dB)')
-    plt.title('Synthetic Spectrogram')
-    plt.xlabel('Time step')
-    plt.ylabel('Frequency index')
-    save_plot(plt.gcf(), 'Py_fmi_original.png')
-    plt.close()
-
     # Save synthetic spectrogram data to CSV
-    save_csv(psd, 'Py_fmi_syn_spect.csv')
+    # save_csv(psd, 'Py_fmi_syn_spect.csv')
 
     # Invert empiric data set
     try:
         result = fmi_inversion.fmi_inversion(reference=ref_spectra, data=psd)
         
-        # Plot RMSE per frequency
-        plt.figure(figsize=(10, 5))
-        plt.imshow(result['rmse'].T, aspect='auto', cmap='viridis')
-        plt.colorbar(label='RMSE')
-        plt.title('RMSE per Frequency')
-        plt.xlabel('Time step')
-        plt.ylabel('Frequency index')
-        save_plot(plt.gcf(), 'Py_fmi_rmse.png')
-        plt.close()
+        # Plot model results
+        fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(10, 10))
 
-        # Save RMSE data to CSV
-        save_csv(result['rmse'], 'Py_fmi_rmse.csv')
+        ax1.plot(result['parameters'][:, 1] * 2650, label='q_s')
+        ax1.set_ylabel('Bedload flux (m²/s)')
+        ax1.legend()
+
+        ax2.plot(result['parameters'][:, 0], label='h_w')
+        ax2.set_ylabel('Water depth (m)')
+        ax2.set_xlabel('Time step')
+        ax2.legend()
+        save_plot(fig, 'Py_fmi_inversion.png')
+        plt.tight_layout()
+        plt.close()
 
     except Exception as e:
         print(f"Error during inversion or plotting: {str(e)}")
