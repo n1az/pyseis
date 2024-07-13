@@ -198,7 +198,7 @@ points(stations[,1:2])
 dev.off()
 
 # save result e_max
-write.csv(e_max, file= "R/output/R_spatial_pmax.png")
+write.csv(e_max, file= "R/output/R_spatial_pmax.csv")
 
 ## plot output
 png("R/output/R_spatial_ampl2.png")
@@ -208,9 +208,9 @@ points(stations[,1:2])
 dev.off()
 
 print("spatial_clip")
-## clip values to those > quantile 0.5
+## clip values to those > quantile 0.75
 volcano <- terra::rast(volcano)
-volcano_clip <- spatial_clip(data = volcano, quantile = 0.5)
+volcano_clip <- spatial_clip(data = volcano, quantile = 0.75)
 
 ## plot clipped data set
 png("R/output/R_spatial_clip.png")
@@ -218,53 +218,20 @@ terra::plot(volcano_clip)
 dev.off()
 
 ### spatial_convert
-## create lat lon coordinates
-xy <- c(13, 55)
 
 ## define output coordinate systems
 proj_in <- "+proj=longlat +datum=WGS84"
 proj_out <- "+proj=utm +zone=32 +datum=WGS84"
 
-## convert coordinate pair
-xy_convert <- spatial_convert(data = xy, from = proj_in, to = proj_out)
-write.csv(xy_convert, file = "R/output/R_spatial_convert_pair.csv")
 
-## define set of coordinates
-df_xy <- data.frame(x = c(10, 11), y = c(54, 55))
+## define set of lat lon coordinates
+df_xy <- data.frame(x = c(25, 75, 50), y = c(25, 75, 90))
 
 ## convert set of coordinates
-spatial_convert(data = df_xy, from = proj_in, to = proj_out)
-write.csv(df_xy, file = "R/output/R_spatial_convert_set.csv")
+xy_convert <- spatial_convert(data = df_xy, from = proj_in, to = proj_out)
+write.csv(df_xy, file = "R/output/R_original_stations.csv")
+write.csv(xy_convert, file = "R/output/R_converted_stations.csv")
 
-#print("spatial_track")
-# create artificial data set
-# Set seed for reproducibility
-#set.seed(123)
-
-# Generate sample seismic data
-#num_stations <- 3
-#data_length <- 1000  # Length of the seismic signal data
-#data <- matrix(
-#  rnorm(num_stations * data_length),
-#  nrow = num_stations,
-#  ncol = data_length)
-
-# Convert the data to a data frame for easier plotting
-#data_df <- data.frame(t(data))
-#colnames(data_df) <- paste0("Station_", 1:num_stations)
-#data_df$Time <- 1:data_length
-
-#x <- spatial_track(
-#    data = data_df,
-#    window = 3,
-#    overlap = 0.5,
-#    d_map = D$maps,
-#    v = 800,
-#    q = 40,
-#    f = 12,
-#    qt = 0.99,
-#    dt = 2
-#    )
 
 ############### Modeling ###############
 
