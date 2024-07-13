@@ -3,7 +3,14 @@
 
 ### Abstract Description
 
-The data analysis workflow is designed to facilitate the translation and validation of seismological data analysis components from the R programming language to Python. This workflow ensures that the translated components are functionally equivalent to their original counterparts by comparing the outputs from both implementations. Below is an abstract description of each step in the workflow:
+The data analysis workflow is designed to facilitate the translation and validation of seismological data analysis components from the R programming language to Python. This workflow ensures that the translated components are functionally equivalent to their original counterparts by comparing the outputs from both implementations. After the UML diagram abstract description of each step in the workflow is given:
+
+### UML Activity Diagram
+
+Below is the PlantUML code for the described activity diagram, incorporating the loop back to the translation step using the `repeat` syntax:
+
+![Activity Diagram](diagram_updated.png)
+
 
 ### Component Selection
 Identify and select specific components from the existing `eseis` package, which is used for seismological data analysis in R. We only selected the components which are not currently available in Python.
@@ -27,12 +34,6 @@ Evaluate whether the outputs from both implementations match:
 
 ### Debug and Reiterate
 If discrepancies are found during the output comparison, debug the translated Python components. This involves analyzing the differences, correcting any issues, and repeating the translation and validation steps until consistency is achieved.
-
-## UML Activity Diagram
-
-Below is the PlantUML code for the described activity diagram, incorporating the loop back to the translation step using the `repeat` syntax:
-
-![Activity Diagram](diagram_updated.png)
 
 ## Component Analysis
 In this section, we identify and select specific components from the existing eseis package, which is used for seismological data analysis in R. We have focused on translating components that are not currently available in Python. The table below lists these components, detailing their operations, inputs, outputs, and implementation. 
