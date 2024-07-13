@@ -1,62 +1,53 @@
 <h1 align="center">Pyseis</h1>
 
 <p align="center">
-  <img alt="Github top language" src="https://img.shields.io/gitlab/languages/top/tautz1/pyseis?color=56BEB8">
-
-  <img alt="Github language count" src="https://img.shields.io/gitlab/languages/count/tautz1/pyseis?color=56BEB8">
-
-  <img alt="Repository size" src="https://img.shields.io/gitlab/repo-size/tautz1/pyseis?color=56BEB8">
-
-  <img alt="License" src="https://img.shields.io/gitlab/license/tautz1/pyseis?color=56BEB8">
-
-  <img alt="Github issues" src="https://img.shields.io/gitlab/issues/tautz1/pyseis?color=56BEB8" />
-
-  <!-- <img alt="Github forks" src="https://img.shields.io/github/forks/{{YOUR_GITHUB_USERNAME}}/pyseis?color=56BEB8" /> -->
-
-  <!-- <img alt="Github stars" src="https://img.shields.io/github/stars/{{YOUR_GITHUB_USERNAME}}/pyseis?color=56BEB8" /> -->
-</p>
-
-<!-- Status -->
-
-<h4 align="center"> 
-	🚧  Pyseis 🚀 Under construction...  🚧
-</h4> 
-
-<hr>
-
-<p align="center">
   <a href="#dart-project-overview">Overview</a> &#xa0; | &#xa0; 
   <a href="#sparkles-features">Features</a> &#xa0; | &#xa0;
-  <a href="#rocket-technologies">Technologies</a> &#xa0; | &#xa0;
-  <a href="#white_check_mark-requirements">Requirements</a> &#xa0; | &#xa0;
-  <a href="#checkered_flag-starting">Starting</a> &#xa0; | &#xa0;
+  <a href="#rocket-tools">Tools</a> &#xa0; | &#xa0;
+  <a href="#white_check_mark-installation">Installation</a> &#xa0; | &#xa0;
   <a href="#memo-license">License</a> &#xa0; | &#xa0;
   <a href="#black_nib-citation">Citation</a> &#xa0; | &#xa0;
+  <a href="#notebook_with_decorative_cover-contributing-to-pyseis">Contributions</a> &#xa0; | &#xa0;
 </p>
 
-<br>
 
-# :dart: Project Overview #
+## :dart: Project Overview ##
 
-Environmental seismology is a scientific field that studies the
-seismic signals, emitted by Earth surface processes. This package
-provides all relevant functions to read/write seismic data files, prepare,
-analyse and visualise seismic data, and generate reports of the processing
-history.
+PySeis is a `Python` package for environmental seismology, a scientific field that studies the seismic signals emitted by Earth surface processes. This package provides a suite of tools to facilitate the reading, writing, preparation, analysis, and visualization of seismic data, drawing inspiration from the functionality of the [eseis](R/dietze2018_R_eseis.pdf) package in `R`. 
+
+## :question: Why Pyseis ##
+
+While the eseis package in `R` offers tools for seismological data analysis, there was a gap in equivalent functionality within the `Python` ecosystem. PySeis aims to bridge this gap by providing `Python` users with a comparable suite of tools, ensuring they can perform environmental seismology tasks efficiently within a `Python` environment.
 
 ## :sparkles: Features ##
 
-:heavy_check_mark: Signal Processing;\
-:heavy_check_mark: Signal Analysis;\
-:heavy_check_mark: Visualization;
+:heavy_check_mark: Fluvial data inversion\
+:heavy_check_mark: Reference model creation\
+:heavy_check_mark: Spatial distance calculation\
+:heavy_check_mark: Spatial signals migration\
+:heavy_check_mark: Spatial data clipping\
+:heavy_check_mark: Coordinate conversion\
+:heavy_check_mark: Source location detection\
+:heavy_check_mark: Source tracking\
+:heavy_check_mark: Spectrum modeling
 
-## :rocket: Technologies ##
+## :rocket: Tools ##
 
 The following tools were used in this project:
 
 - [Python](https://www.python.org)
+- [NumPy](https://pypi.org/project/numpy/)
+- [Pandas](https://pypi.org/project/pandas/)
+- [Geopandas](https://pypi.org/project/geopandas/)
+- [Matplotlib](https://pypi.org/project/matplotlib/)
+- [Scipy](https://pypi.org/project/scipy/)
+- [Shapely](https://pypi.org/project/shapely/)
+- [Rasterio](https://pypi.org/project/rasterio/)
 
-## :white_check_mark: Requirements ##
+
+
+
+## :white_check_mark: Installation ##
 
 Before starting :checkered_flag:, you need to have [Git](https://git-scm.com) and [Python](https://www.python.org) installed.
 
@@ -79,17 +70,23 @@ $ python pyseis.py
 
 ## :memo: License ##
 
-This project is under license from MIT. For more details, see the [LICENSE](LICENSE) file.
+[MIT](LICENSE)
 
 ## :black_nib: Citation ##
 
 If you use this software, please cite it using [this](CITATION.cff) file.
 
-## :memo: Code of Conduct & Contribution Guidelines ##
+## :notebook_with_decorative_cover: Contributing to Pyseis ##
 
-To find out about Code of Conduct, please see [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](CONDUCT.md)
+[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](CONDUCT.md)
 
-Please check [here](CONTRIBUTING.md) to know the contribution guidelines.
+All contributions, bug reports, bug fixes, documentation improvements, enhancements, and ideas are welcome.
+
+A detailed overview on how to contribute can be found in the [contributing guide](CONTRIBUTING.md). Feel free to create new issues and start working on it!
+
+As contributors and maintainers to this project, you are expected to abide by Pyseis' code of conduct. 
+
+More information can be found at: [Code of Conduct](CONDUCT.md)
 
 &#xa0;
 
