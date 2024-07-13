@@ -5,9 +5,10 @@
   <a href="#sparkles-features">Features</a> &#xa0; | &#xa0;
   <a href="#rocket-tools">Tools</a> &#xa0; | &#xa0;
   <a href="#white_check_mark-installation">Installation</a> &#xa0; | &#xa0;
+  <a href="#book-documentation">Documentation</a> &#xa0; | &#xa0;
   <a href="#memo-license">License</a> &#xa0; | &#xa0;
   <a href="#black_nib-citation">Citation</a> &#xa0; | &#xa0;
-  <a href="#notebook_with_decorative_cover-contributing-to-pyseis">Contributions</a> &#xa0; | &#xa0;
+  <a href="#notebook_with_decorative_cover-contributing-to-pyseis">Contributing</a> &#xa0; | &#xa0;
 </p>
 
 
@@ -61,12 +62,16 @@ $ cd pyseis
 
 # Activate your virtual environment (optional)
 # Install the pyseis package
-$ pip install -e .
+$ pip install .
 
 # To see the data analysis workflow, install snakemake and run
 $ snakemake -j 1 --latency-wait 60
 
 ```
+
+## :book: Documentation ##
+
+To see Pyseis documentation open [this](docs/index.html) in your browser.
 
 ## :memo: License ##
 
