@@ -12,7 +12,7 @@ output_dir = os.path.join(script_directory, 'output')
 os.makedirs(output_dir, exist_ok=True)
 
 # Import the pre-implemented functions
-from bin import fmi_parameters, model_bedload, model_turbulence, fmi_spectra, fmi_inversion
+from pyseis import fmi_parameters, model_bedload, model_turbulence, fmi_spectra, fmi_inversion
 
 def save_plot(fig, filename):
     """

@@ -11,7 +11,7 @@ import sys
 script_directory = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.join(script_directory, '..'))
 
-from bin import spatial_distance, spatial_migrate, spatial_clip, spatial_convert, spatial_amplitude, spatial_pmax
+from pyseis import spatial_distance, spatial_migrate, spatial_clip, spatial_convert, spatial_amplitude, spatial_pmax
 from test_fmi_models import save_plot, save_csv
 
 # Function to create a synthetic DEM and save it to a file

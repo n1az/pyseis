@@ -10,7 +10,7 @@ script_directory = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.join(script_directory, '..'))
 
 # Import the pre-implemented functions
-from bin import fmi_parameters, model_bedload, model_turbulence, fmi_spectra
+from pyseis import fmi_parameters, model_bedload, model_turbulence, fmi_spectra
 
 def fmi_inversion(reference, data, n_cores=1):
     """

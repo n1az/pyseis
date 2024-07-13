@@ -9,7 +9,7 @@ import sys
 script_directory = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.join(script_directory, '..'))
 
-from bin import fmi_parameters, model_bedload, model_turbulence
+from pyseis import fmi_parameters, model_bedload, model_turbulence
 
 def f(parameters):
     # Model spectrum due to water flow
