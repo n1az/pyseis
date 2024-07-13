@@ -7,6 +7,43 @@ import os
 import matplotlib.pyplot as plt
 
 def spatial_distance(stations, dem, topography=True, maps=True, matrix=True, aoi=None, verbose=False):
+    """
+    Calculate spatial distances between weather stations considering topography.
+
+    This function computes distances between weather stations, optionally considering
+    topography. It can generate distance maps for each station and a distance matrix
+    between all stations.
+
+    Parameters:
+    -----------
+    stations : numpy.ndarray
+        Array of station coordinates, shape (n, 2) where n is the number of stations.
+    dem : str
+        Path to the Digital Elevation Model (DEM) file.
+    topography : bool, optional
+        If True, consider topography in distance calculations. Default is True.
+    maps : bool, optional
+        If True, generate distance maps for each station. Default is True.
+    matrix : bool, optional
+        If True, generate a distance matrix between all stations. Default is True.
+    aoi : list, optional
+        Area of Interest extent [left, right, bottom, top]. If None, use full DEM extent.
+    verbose : bool, optional
+        If True, print processing information. Default is False.
+
+    Returns:
+    --------
+    dict
+        A dictionary containing:
+        - 'maps': List of dictionaries, each containing distance map data for a station.
+        - 'matrix': numpy.ndarray, distance matrix between all stations.
+
+    Raises:
+    -------
+    ValueError
+        If DEM contains NA values, station coordinates are outside DEM extent,
+        or AOI extent is beyond DEM extent.
+    """
     # PART 0 - check input data ------------------------------------------------
     # open DEM file
     with rasterio.open(dem) as src:
