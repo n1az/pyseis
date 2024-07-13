@@ -5,25 +5,52 @@ from rasterio import features
 from shapely.geometry import Point, LineString
 import multiprocessing as mp
 
+
 def model_fun(params, d, a_d, f, q, v):
     a_0 = params[0]
     return a_d - a_0 / np.sqrt(d.sum()) * np.exp(-((np.pi * f * d.sum()) / (q * v)))
+
 
 def _process_pixel(args):
     d, a_d, f, q, v, output, model_start = args
     if np.all(~np.isnan(d)):
         if output == "variance":
-            res = 1 - (np.sum(least_squares(model_fun, model_start, args=(d, a_d, f, q, v), loss='soft_l1').fun ** 2) /
-                       np.sum(a_d ** 2))
+            res = 1 - (
+                np.sum(
+                    least_squares(
+                        model_fun, model_start, args=(d, a_d, f, q, v), loss="soft_l1"
+                    ).fun
+                    ** 2
+                )
+                / np.sum(a_d**2)
+            )
         elif output == "residuals":
-            res = np.sum(least_squares(model_fun, model_start, args=(d, a_d, f, q, v), loss='soft_l1').fun ** 2)
+            res = np.sum(
+                least_squares(
+                    model_fun, model_start, args=(d, a_d, f, q, v), loss="soft_l1"
+                ).fun
+                ** 2
+            )
         else:
             raise ValueError("Invalid output type. Must be 'residuals' or 'variance'.")
     else:
         res = np.nan
     return res
 
-def spatial_amplitude(data, coupling, d_map, aoi=None, v=None, q=None, f=None, a_0=None, normalise=True, output="variance", cpu=None):
+
+def spatial_amplitude(
+    data,
+    coupling,
+    d_map,
+    aoi=None,
+    v=None,
+    q=None,
+    f=None,
+    a_0=None,
+    normalise=True,
+    output="variance",
+    cpu=None,
+):
     """
     Locate the source of a seismic event by modeling amplitude attenuation.
 
@@ -43,7 +70,6 @@ def spatial_amplitude(data, coupling, d_map, aoi=None, v=None, q=None, f=None, a
     Returns:
     rasterio.io.MemoryFile: A raster with the location output metrics for each grid cell.
 
-    Author: Md Niaz Morshed
     """
     # Debugging: Print shapes and types of input data
     print(f"Data shape: {np.array(data).shape}")
@@ -53,7 +79,7 @@ def spatial_amplitude(data, coupling, d_map, aoi=None, v=None, q=None, f=None, a
 
     # Check/format input data
     if isinstance(data, np.ndarray):
-        data_list = [{'signal': row} for row in data]
+        data_list = [{"signal": row} for row in data]
     else:
         data_list = data
 
@@ -62,14 +88,14 @@ def spatial_amplitude(data, coupling, d_map, aoi=None, v=None, q=None, f=None, a
         coupling = np.ones(len(data_list))
 
     # Get maximum amplitude
-    a_d = np.array([max(data['signal']) for data in data_list]) * (1 / coupling)
+    a_d = np.array([max(data["signal"]) for data in data_list]) * (1 / coupling)
 
     # Check/set source amplitude
     if a_0 is None:
         a_0 = 100 * np.max(a_d)
 
     # Extract distance values from d_map dictionaries
-    d = np.dstack([map_data['values'] for map_data in d_map])
+    d = np.dstack([map_data["values"] for map_data in d_map])
 
     # Debugging: Print shape of combined distance map
     print(f"Combined distance map shape: {d.shape}")
@@ -97,10 +123,12 @@ def spatial_amplitude(data, coupling, d_map, aoi=None, v=None, q=None, f=None, a
     pool = mp.Pool(processes=cores)
 
     # Model event amplitude as a function of distance
-    args_list = [(d[i, j, :], a_d, f, q, v, output, model_start) 
-                 for i in range(d.shape[0]) 
-                 for j in range(d.shape[1]) 
-                 if px_ok[i, j]]
+    args_list = [
+        (d[i, j, :], a_d, f, q, v, output, model_start)
+        for i in range(d.shape[0])
+        for j in range(d.shape[1])
+        if px_ok[i, j]
+    ]
 
     # Debugging: Print number of pixels to process
     print(f"Number of pixels to process: {len(args_list)}")
@@ -127,13 +155,13 @@ def spatial_amplitude(data, coupling, d_map, aoi=None, v=None, q=None, f=None, a
     # Create a memory file to store the result
     memfile = rasterio.io.MemoryFile()
     with memfile.open(
-        driver='GTiff',
+        driver="GTiff",
         height=d.shape[0],
         width=d.shape[1],
         count=1,
         dtype=r.dtype,
-        crs=d_map[0]['crs'],
-        transform=d_map[0]['transform']
+        crs=d_map[0]["crs"],
+        transform=d_map[0]["transform"],
     ) as dataset:
         dataset.write(r, 1)
 

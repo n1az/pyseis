@@ -2,7 +2,18 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.optimize import minimize
 
-def spatial_track(data, coordinates, distance_map, sampling_rate, max_lag, time_window, overlap, cpu=1, plot=False):
+
+def spatial_track(
+    data,
+    coordinates,
+    distance_map,
+    sampling_rate,
+    max_lag,
+    time_window,
+    overlap,
+    cpu=1,
+    plot=False,
+):
     """
     Track the spatial location of a seismic source based on seismic signal data.
 
@@ -29,14 +40,13 @@ def spatial_track(data, coordinates, distance_map, sampling_rate, max_lag, time_
     Returns:
     dict
         Dictionary containing the mean and standard deviation of the tracked source coordinates, amplitude, and variance reduction over time.
-    
-    Author: Shahriar Shohid Choudhury
+
     """
 
     def cross_correlation(x, y, max_lag):
         lags = np.arange(-max_lag, max_lag + 1)
-        cc = np.correlate(x - np.mean(x), y - np.mean(y), 'full')
-        return cc[(len(cc) // 2 - max_lag):(len(cc) // 2 + max_lag + 1)], lags
+        cc = np.correlate(x - np.mean(x), y - np.mean(y), "full")
+        return cc[(len(cc) // 2 - max_lag) : (len(cc) // 2 + max_lag + 1)], lags
 
     def objective_function(params, *args):
         source_signal, distance_map = args
@@ -65,7 +75,12 @@ def spatial_track(data, coordinates, distance_map, sampling_rate, max_lag, time_
 
         # Source location estimation
         initial_guess = np.zeros(distance_map.shape[1])
-        res = minimize(objective_function, initial_guess, args=(window_data[0], distance_map), method='L-BFGS-B')
+        res = minimize(
+            objective_function,
+            initial_guess,
+            args=(window_data[0], distance_map),
+            method="L-BFGS-B",
+        )
         estimated_coords = res.x
 
         mean_coordinates.append(np.mean(estimated_coords))
@@ -76,19 +91,19 @@ def spatial_track(data, coordinates, distance_map, sampling_rate, max_lag, time_
         sd_variances.append(np.std(cc_matrix))
 
     results = {
-        'time': times,
-        'mean': {
-            'x': np.array(mean_coordinates),
-            'y': np.array(mean_coordinates),
-            'a_0': np.array(mean_amplitudes),
-            'var': np.array(mean_variances)
+        "time": times,
+        "mean": {
+            "x": np.array(mean_coordinates),
+            "y": np.array(mean_coordinates),
+            "a_0": np.array(mean_amplitudes),
+            "var": np.array(mean_variances),
         },
-        'sd': {
-            'x': np.array(sd_coordinates),
-            'y': np.array(sd_coordinates),
-            'a_0': np.array(sd_amplitudes),
-            'var': np.array(sd_variances)
-        }
+        "sd": {
+            "x": np.array(sd_coordinates),
+            "y": np.array(sd_coordinates),
+            "a_0": np.array(sd_amplitudes),
+            "var": np.array(sd_variances),
+        },
     }
 
     if plot:
@@ -97,29 +112,40 @@ def spatial_track(data, coordinates, distance_map, sampling_rate, max_lag, time_
 
         # Plot source trajectory
         plt.subplot(1, 3, 1)
-        plt.errorbar(results['mean']['x'], results['mean']['y'], xerr=results['sd']['x'], yerr=results['sd']['y'], fmt='o')
-        plt.title('Source Trajectory')
-        plt.xlabel('X Coordinate')
-        plt.ylabel('Y Coordinate')
+        plt.errorbar(
+            results["mean"]["x"],
+            results["mean"]["y"],
+            xerr=results["sd"]["x"],
+            yerr=results["sd"]["y"],
+            fmt="o",
+        )
+        plt.title("Source Trajectory")
+        plt.xlabel("X Coordinate")
+        plt.ylabel("Y Coordinate")
 
         # Plot source amplitude
         plt.subplot(1, 3, 2)
-        plt.errorbar(results['time'], results['mean']['a_0'], yerr=results['sd']['a_0'], fmt='o')
-        plt.title('Source Amplitude')
-        plt.xlabel('Time')
-        plt.ylabel('Amplitude')
+        plt.errorbar(
+            results["time"], results["mean"]["a_0"], yerr=results["sd"]["a_0"], fmt="o"
+        )
+        plt.title("Source Amplitude")
+        plt.xlabel("Time")
+        plt.ylabel("Amplitude")
 
         # Plot variance reduction
         plt.subplot(1, 3, 3)
-        plt.errorbar(results['time'], results['mean']['var'], yerr=results['sd']['var'], fmt='o')
-        plt.title('Variance Reduction')
-        plt.xlabel('Time')
-        plt.ylabel('Variance Reduction (%)')
+        plt.errorbar(
+            results["time"], results["mean"]["var"], yerr=results["sd"]["var"], fmt="o"
+        )
+        plt.title("Variance Reduction")
+        plt.xlabel("Time")
+        plt.ylabel("Variance Reduction (%)")
 
         plt.tight_layout()
         plt.show()
 
     return results
+
 
 # Example usage of the spatial_track function
 if __name__ == "__main__":
@@ -150,18 +176,18 @@ if __name__ == "__main__":
         time_window=time_window,
         overlap=overlap,
         cpu=1,  # Assuming single CPU for simplicity
-        plot=True
+        plot=True,
     )
 
     # Print the results
     print("Tracked source coordinates (mean):")
-    print("X:", results['mean']['x'])
-    print("Y:", results['mean']['y'])
-    print("Amplitude:", results['mean']['a_0'])
-    print("Variance Reduction:", results['mean']['var'])
+    print("X:", results["mean"]["x"])
+    print("Y:", results["mean"]["y"])
+    print("Amplitude:", results["mean"]["a_0"])
+    print("Variance Reduction:", results["mean"]["var"])
 
     print("\nTracked source coordinates (standard deviation):")
-    print("X:", results['sd']['x'])
-    print("Y:", results['sd']['y'])
-    print("Amplitude:", results['sd']['a_0'])
-    print("Variance Reduction:", results['sd']['var'])
+    print("X:", results["sd"]["x"])
+    print("Y:", results["sd"]["y"])
+    print("Amplitude:", results["sd"]["a_0"])
+    print("Variance Reduction:", results["sd"]["var"])

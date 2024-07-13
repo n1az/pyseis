@@ -2,6 +2,7 @@ import numpy as np
 import rasterio
 from rasterio.io import MemoryFile
 
+
 def spatial_clip(data, quantile, replace=np.nan, normalise=True):
     """
     Clip values of spatial data.
@@ -17,7 +18,6 @@ def spatial_clip(data, quantile, replace=np.nan, normalise=True):
     Returns:
     rasterio.io.DatasetReader: Data set with clipped values.
 
-    Author: Lamia Islam
     """
     # Check/set parameters
     if quantile is None:
@@ -32,7 +32,9 @@ def spatial_clip(data, quantile, replace=np.nan, normalise=True):
 
     # Optionally normalize data set
     if normalise:
-        raster_data = (raster_data - np.nanmin(raster_data)) / (np.nanmax(raster_data) - np.nanmin(raster_data))
+        raster_data = (raster_data - np.nanmin(raster_data)) / (
+            np.nanmax(raster_data) - np.nanmin(raster_data)
+        )
 
     # Create a new raster with clipped values
     profile = data.profile.copy()
