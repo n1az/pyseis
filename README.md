@@ -71,7 +71,7 @@ $ snakemake -j 1 --latency-wait 60
 
 ## :book: Documentation ##
 
-Pyseis documentation can be found [here](docs/index.html).
+To see Pyseis documentation open [this](docs/index.html) in your browser.
 
 ## :memo: License ##
 
