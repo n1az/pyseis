@@ -14,7 +14,7 @@ The data analysis workflow is designed to facilitate the translation and validat
 Identify and select specific components from the existing `eseis` package, which are not currently available in Python.
 
 ### Translation to Python
-Translate the selected R components into Python, ensuring that the functionality and logic of the original components are preserved.
+Translate the selected R components into Python, ensuring that the functionality and logic of the original components are preserved. For details on which components each member is responsible for, see the [Task Distribution](#task-distribution) section.
 
 ### Unit Testing
 Conduct unit testing on the translated Python components to verify their correctness and ensure they perform as expected.
@@ -39,7 +39,7 @@ Present the outputs from both the Python and R side-by-side in a Jupyter Noteboo
 
 
 ## Component Analysis
-In this section, we identify and select specific components from the existing eseis package, which is used for seismological data analysis in R. We have focused on translating components that are not currently available in Python. The table below lists these components, detailing their operations, inputs, outputs, and implementation. 
+In this section, we identify and select specific components from the existing eseis package, which are not currently available in Python. The table below lists these components, detailing their operations, inputs, outputs, and implementation. 
 
 | Component         | Operation                                                        | Input(s)                                                                                                                           | Output(s)                                               | Implementation                              |
 | ----------------- | ---------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- | ------------------------------------------- |
@@ -55,6 +55,17 @@ In this section, we identify and select specific components from the existing es
 | spatial_track     | Track a spatially mobile seismic source                          | seismic signals, coupling efficiency, time window, distance maps, area of interest, velocity, quality factor, frequency, CPUs, verbose flag | list object with summarising statistics of the fits     | Available in R package (eseis), to be translated to Python       |
 | model_bedload     | Model the seismic spectrum due to bedload transport in rivers    | grain-size distribution, sediment parameters, fluid flow parameters, frequency range, distance to source, reference frequency, quality factor, Rayleigh wave parameters | eseis object containing the modelled spectrum           | Available in R package (eseis), to be translated to Python       |
 | model_turbulence  | Model the seismic spectrum due to hydraulic turbulence           | sediment parameters, fluid flow parameters, frequency range, distance to source, reference frequency, quality factor, Rayleigh wave parameters | eseis object containing the modelled spectrum           | Available in R package (eseis), to be translated to Python       |
+
+### Task Distribution
+Each team member will be responsible for translating specific components from R to Python. The components are divided among the members as follows:
+
+| Member        | Components Assigned                        |
+| ------------- | ------------------------------------------ |
+| Frieder       | fmi_inversion, fmi_parameters, fmi_spectra |
+| Niaz          | spatial_distance, spatial_migrate, spatial_amplitude |
+| Lamia         | spatial_clip, spatial_convert, spatial_pmax |
+| Shahriar      | spatial_track, model_bedload, model_turbulence   |
+
 
 ## Non-Functional Requirements
 1. **Performance**
