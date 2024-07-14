@@ -65,7 +65,7 @@ $ cd pyseis
 $ pip install .
 
 # To see the data analysis workflow, install snakemake and run
-$ snakemake -j 1 --latency-wait 60
+$ snakemake -s workflow/snakefile -j 1 --latency-wait 60
 
 ```
 
