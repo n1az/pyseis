@@ -1,0 +1,59 @@
+terra 1.7.39
+Warning message:
+package 'terra' was built under R version 4.2.3 
+Warning message:
+package 'eseis' was built under R version 4.2.3 
+Loading required package: sp
+The legacy packages maptools, rgdal, and rgeos, underpinning the sp package,
+which was just loaded, will retire in October 2023.
+Please refer to R-spatial evolution reports for details, especially
+https://r-spatial.org/r/2023/05/15/evolution4.html.
+It may be desirable to make the sf package available;
+package maintainers should consider adding sf to Suggests:.
+The sp package is now running under evolution status 2
+     (status 2 uses the sf package in place of rgdal)
+Warning messages:
+1: package 'raster' was built under R version 4.2.3 
+2: package 'sp' was built under R version 4.2.3 
+Warning message:
+package 'httpgd' was built under R version 4.2.3 
+[1] "C:/Users/niaz1/Documents/DS Study/RSE/Niaz/pyseis"
+null device 
+          1 
+null device 
+          1 
+Warning message:
+[is.lonlat] coordinates are out of range for lon/lat 
+null device 
+          1 
+[1] "Processing map for station 1"
+[1] "Processing map for station 2"
+[1] "Processing map for station 3"
+[1] "Processing station distances"
+Warning message:
+[is.lonlat] coordinates are out of range for lon/lat 
+null device 
+          1 
+Warning message:
+[is.lonlat] coordinates are out of range for lon/lat 
+null device 
+          1 
+[1] "spatial_clip"
+null device 
+          1 
+[1] "model"
+[1] "Processing map for station 1"
+[1] "Processing map for station 2"
+[1] "Processing map for station 3"
+[1] "Processing map for station 4"
+[1] "Processing station distances"
+$a_0
+     a_0 
+16.46449 
+
+$residuals
+[1] 0.0003341218
+
+$var_reduction
+[1] 0.9979051
+

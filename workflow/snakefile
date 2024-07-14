@@ -13,12 +13,14 @@ NB_FILES = ["analysis"]
 # Output directory
 OUTPUT_DIR = "output"
 LOG_DIR = os.path.join(OUTPUT_DIR, "logs")
+# TEMPLATES_DIR = "templates"
+# TMPLT_FILE = os.path.join(TEMPLATES_DIR, "config.tpl")
 
 rule all:
     input:
         expand(f"{OUTPUT_DIR}/R_{{script}}.txt", script=R_SCRIPTS),
         expand(f"{OUTPUT_DIR}/py_{{script}}.txt", script=PY_SCRIPTS),
-        expand(f"{OUTPUT_DIR}/{{notebook}}.html", notebook=NB_FILES)
+        expand(f"{OUTPUT_DIR}/{{notebook}}.md", notebook=NB_FILES)
 
 rule clean:
     output:
@@ -57,9 +59,9 @@ rule run_jupyter_notebook:
     input:
         notebook = "docs/{notebook}.ipynb",
         r_scripts = expand(f"{OUTPUT_DIR}/R_{{script}}.txt", script=R_SCRIPTS),
-        py_scripts = expand(f"{OUTPUT_DIR}/py_{{script}}.txt", script=PY_SCRIPTS)
+        py_scripts = expand(f"{OUTPUT_DIR}/py_{{script}}.txt", script=PY_SCRIPTS),
     output:
-        html = f"{OUTPUT_DIR}/{{notebook}}.html"
+        md = f"{OUTPUT_DIR}/{{notebook}}.md"
     log:
         f"{LOG_DIR}/{{notebook}}.log"
     run:
@@ -78,12 +80,12 @@ rule run_jupyter_notebook:
                 input.notebook
             ], check=True, stdout=log_file, stderr=subprocess.STDOUT)
 
-            # Convert to HTML
+            # Convert to Markdown
             subprocess.run([
                 sys.executable, "-m", "jupyter", "nbconvert", 
-                "--to", "html", 
+                "--to", "markdown", 
                 "--no-input",
                 f"--output-dir={OUTPUT_DIR}",
-                f"--output={os.path.basename(output.html)}",
+                f"--output={os.path.basename(output.md)}",
                 input.notebook
             ], check=True, stdout=log_file, stderr=subprocess.STDOUT)
