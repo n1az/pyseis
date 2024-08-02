@@ -1,3 +1,10 @@
+from pyseis import (
+    fmi_parameters,
+    model_bedload,
+    model_turbulence,
+    fmi_spectra,
+    fmi_inversion,
+)
 import numpy as np
 import matplotlib.pyplot as plt
 import os
@@ -9,13 +16,6 @@ output_dir = os.path.join(script_directory, "output")
 os.makedirs(output_dir, exist_ok=True)
 
 # Import the pre-implemented functions
-from pyseis import (
-    fmi_parameters,
-    model_bedload,
-    model_turbulence,
-    fmi_spectra,
-    fmi_inversion,
-)
 
 
 def save_plot(fig, filename):
@@ -83,7 +83,8 @@ def main():
     )
 
     # Save ref_pars to CSV
-    ref_pars_headers = ["Parameter"] + [f"Set {i+1}" for i in range(len(ref_pars))]
+    ref_pars_headers = ["Parameter"] + \
+        [f"Set {i+1}" for i in range(len(ref_pars))]
     ref_pars_data = []
 
     # Get all unique keys from all dictionaries
@@ -127,7 +128,8 @@ def main():
                 and len(spectrum["frequency"]) > 0
             ):
                 print(
-                    f"  Frequency range: {spectrum['frequency'][0]} - {spectrum['frequency'][-1]} Hz"
+                    f"  Frequency range: {spectrum['frequency'][0]} \
+                        - {spectrum['frequency'][-1]} Hz"
                 )
             else:
                 print(f"  Frequency: {spectrum['frequency']}")
@@ -140,7 +142,8 @@ def main():
                 and len(spectrum["power"]) > 0
             ):
                 print(
-                    f"  Power range: {min(spectrum['power']):.2f} - {max(spectrum['power']):.2f} dB"
+                    f"  Power range: {min(spectrum['power']):.2f} - \
+                        {max(spectrum['power']):.2f} dB"
                 )
             else:
                 print(f"  Power: {spectrum['power']}")
@@ -150,7 +153,10 @@ def main():
     # Plotting
     plt.figure(figsize=(12, 8))
     for i, spectrum in enumerate(ref_spectra):
-        plt.plot(spectrum["frequency"], spectrum["power"], label=f"Spectrum {i+1}")
+        plt.plot(
+            spectrum["frequency"],
+            spectrum["power"],
+            label=f"Spectrum {i+1}")
         plt.plot(
             spectrum["frequency"],
             spectrum["turbulence"],
@@ -185,12 +191,16 @@ def main():
             linestyle="--",
         )
         plt.plot(
-            spectrum["frequency"], spectrum["bedload"], label="Bedload", linestyle=":"
+            spectrum["frequency"],
+            spectrum["bedload"],
+            label="Bedload",
+            linestyle=":"
         )
         plt.xlabel("Frequency (Hz)")
         plt.ylabel("Power Spectral Density (dB)")
         plt.title(
-            f'Spectrum {i+1} (h_w: {spectrum["pars"]["h_w"]:.2f} m, q_s: {spectrum["pars"]["q_s"]:.6f} m^2/s)'
+            f'Spectrum {i+1} (h_w: {spectrum["pars"]["h_w"]:.2f} m, q_s: \
+                {spectrum["pars"]["q_s"]:.6f} m^2/s)'
         )
         plt.legend()
         plt.xscale("log")
@@ -201,7 +211,8 @@ def main():
 
     # Define water level and bedload flux time series
     h = np.array([0.01, 1.00, 0.84, 0.60, 0.43, 0.32, 0.24, 0.18, 0.14, 0.11])
-    q = np.array([0.05, 5.00, 4.18, 3.01, 2.16, 1.58, 1.18, 0.89, 0.69, 0.54]) / 2650
+    q = np.array([0.05, 5.00, 4.18, 3.01, 2.16, 1.58,
+                 1.18, 0.89, 0.69, 0.54]) / 2650
     hq = list(zip(h, q))
 
     # Calculate synthetic spectrogram

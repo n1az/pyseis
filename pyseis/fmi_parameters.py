@@ -37,7 +37,8 @@ def fmi_parameters(
     Parameters:
     n (int): Number of output reference spectra.
     d_s (float): Mean sediment grain diameter (m). Alternative to gsd.
-    s_s (float): Standard deviation of sediment grain diameter (m). Alternative to gsd.
+    s_s (float): Standard deviation of sediment grain diameter (m).
+                 Alternative to gsd.
     r_s (float): Specific sediment density (kg / m^3).
     q_s (float): Unit sediment flux (m^2 / s).
     h_w (float): Fluid flow depth (m).
@@ -47,16 +48,21 @@ def fmi_parameters(
     f_max (float): Upper boundary of the frequency range to be modeled.
     r_0 (float): Distance of seismic station to source.
     f_0 (float): Reference frequency (Hz).
-    q_0 (float): Ground quality factor at f_0. Reasonable value may be 20 (Tsai et al. 2012).
-    v_0 (float): Phase speed of the Rayleigh wave at f_0 (m/s). Assuming a shear wave velocity
-                 of about 2200 m/s, Tsai et al. (2012) yield a value of 1295 m/s for this parameter.
-    p_0 (float): Variation exponent of Rayleigh wave velocities with frequency (dimensionless).
-    e_0 (float): Exponent characterizing quality factor increase with frequency (dimensionless).
+    q_0 (float): Ground quality factor at f_0.
+                 Reasonable value may be 20 (Tsai et al. 2012).
+    v_0 (float): Phase speed of the Rayleigh wave at f_0 (m/s).
+                 Assuming a shear wave velocity
+                 of about 2200 m/s, Tsai et al. (2012) yield a value of
+                 1295 m/s for this parameter.
+    p_0 (float): Variation exponent of Rayleigh wave velocities with
+                 frequency (dimensionless).
+    e_0 (float): Exponent characterizing quality factor increase with
+                 frequency (dimensionless).
                  Reasonable value may be 0 (Tsai et al. 2012).
-    n_0_a (float): Lower Greens function displacement amplitude coefficients. Cf. N_ij in eq. 36
-                   in Gimbert et al. (2014).
-    n_0_b (float): Lower Greens function displacement amplitude coefficients. Cf. N_ij in eq. 36
-                   in Gimbert et al. (2014).
+    n_0_a (float): Lower Greens function displacement amplitude coefficients.
+                   Cf. N_ij in eq. 36 in Gimbert et al. (2014).
+    n_0_b (float): Lower Greens function displacement amplitude coefficients.
+                   Cf. N_ij in eq. 36 in Gimbert et al. (2014).
     res (int): Output resolution, i.e., length of the spectrum vector.
 
     Returns:

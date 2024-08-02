@@ -54,11 +54,14 @@ def model_turbulence(
     v_0 : float, optional
         Phase velocity of the Rayleigh wave at f_0 (m/s). Default is 2175.
     p_0 : float, optional
-        Variation exponent of Rayleigh wave velocities with frequency. Default is 0.48.
+        Variation exponent of Rayleigh wave velocities with frequency.
+        Default is 0.48.
     n_0 : tuple, optional
-        Greens function displacement amplitude coefficients. Default is (0.6, 0.8).
+        Greens function displacement amplitude coefficients.
+        Default is (0.6, 0.8).
     res : int, optional
-        Output resolution, i.e., length of the spectrum vector. Default is 1000.
+        Output resolution, i.e., length of the spectrum vector.
+        Default is 1000.
     **kwargs : dict
         Additional parameters that can be modified:
         - g : Gravitational acceleration (m/s^2). Default is 9.81.
@@ -83,7 +86,6 @@ def model_turbulence(
     g = kwargs.get("g", 9.81)
     k = kwargs.get("k", 0.5)
     k_s = kwargs.get("k_s", 3 * d_s)
-    h = kwargs.get("h", k_s / 2)
     e_0 = kwargs.get("e_0", 0)
     r_w = kwargs.get("r_w", 1000)
     c_w = kwargs.get("c_w", 0.5)
@@ -94,24 +96,15 @@ def model_turbulence(
     else:
         f_seq = np.array(f)
 
-    # Calculate frequency dependent quality factor
-    q_seq = q_0 * (f_seq / f_0) ** e_0
-
-    # Calculate frequency dependent wave phase velocity
-    v_seq = v_0 * (f_seq / f_0) ** (-p_0)
-
-    # Calculate frequency dependent wave group velocity
-    v_u_seq = v_seq / (1 + p_0)
-
     # Calculate beta
     beta = (2 * np.pi * r_0 * (1 + p_0) * f_seq ** (1 + p_0 - e_0)) / (
         v_0 * q_0 * f_0 ** (p_0 - e_0)
     )
 
     # Calculate psi
-    psi = 2 * np.log(1 + (1 / beta)) * np.exp(-2 * beta) + (1 - np.exp(-beta)) * np.exp(
-        -beta
-    ) * np.sqrt(2 * np.pi / beta)
+    psi = 2 * np.log(
+        1 + (1/beta)) * np.exp(-2*beta) + (1-np.exp(-beta)) * np.exp(
+            -beta) * np.sqrt(2 * np.pi / beta)
 
     # Calculate auxiliary variables
     c_p_0 = 4 * (1 - (1 / 4 * k_s / h_w))
@@ -127,18 +120,21 @@ def model_turbulence(
     s = s_s / np.sqrt((1 / 3) - 2 / (np.pi**2))
 
     # Define integration limits
-    l = (np.exp(-s) * d_s, np.exp(s) * d_s)
+    l_0 = (np.exp(-s) * d_s, np.exp(s) * d_s)
 
     # Define the integrand function
     def integrand(d, f):
         a = (1 / (1 + (2 * f * d / u_p_0) ** (4 / 3))) ** 2
         b = (
-            1 / (2 * s * d) * (1 + np.cos(np.pi * (np.log(d) - np.log(d_s)) / s))
+            1 / (2 * s * d) * (1 + np.cos(np.pi * (
+                np.log(d) - np.log(d_s)
+            ) / s))
         ) * d**2
         return a * b
 
     # Integrate phi over grain-size distribution
-    phi = np.array([integrate.quad(integrand, l[0], l[1], args=(f,))[0] for f in f_seq])
+    phi = np.array([integrate.quad(integrand, l_0[0], l_0[1], args=(f,))[0]
+                    for f in f_seq])
 
     # Calculate spectral power
     p = (

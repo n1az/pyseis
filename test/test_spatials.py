@@ -47,7 +47,9 @@ def create_dem(xmin, xmax, ymin, ymax, res, filepath):
     x = np.linspace(0, 1, width)
     y = np.linspace(0, 1, height)
     X, Y = np.meshgrid(x, y)
-    dem = (np.sin(5 * X) * np.cos(5 * Y) + np.random.rand(height, width) * 0.1) * 100
+    dem = (np.sin(5 * X) * np.cos(5 * Y) + np.random.rand(
+        height,
+        width) * 0.1) * 100
 
     with rasterio.open(
         filepath,
@@ -101,15 +103,21 @@ if __name__ == "__main__":
     It also saves relevant plots and data to CSV files.
     """
     # Define station coordinates (in the same coordinate system as the DEM)
-    sta = np.array([[25, 25], [75, 75], [50, 90]])  # Adjusted to be within DEM bounds
+    # Adjusted to be within DEM bounds
+    sta = np.array([[25, 25], [75, 75], [50, 90]])
     sta_ids = ["A", "B", "C"]
 
     # Define the input and output projection systems
-    input_proj = "+proj=longlat +datum=WGS84"  # Example: WGS84 geographic coordinates
+    # Example: WGS84 geographic coordinates
+    input_proj = "+proj=longlat +datum=WGS84"
     output_proj = "+proj=utm +zone=32 +datum=WGS84"  # Example: UTM zone 32N
 
     # Convert station coordinates
-    converted_sta = spatial_convert.spatial_convert(sta, input_proj, output_proj)
+    converted_sta = spatial_convert.spatial_convert(
+        sta,
+        input_proj,
+        output_proj
+    )
 
     print("Original station coordinates:")
     print(sta)
@@ -182,7 +190,11 @@ if __name__ == "__main__":
             print(f"Main code - Station coordinates:\n{sta}")
 
             # Calculate spatial distance maps and inter-station distances
-            result = spatial_distance.spatial_distance(sta, dem_filepath, verbose=True)
+            result = spatial_distance.spatial_distance(
+                sta,
+                dem_filepath,
+                verbose=True
+            )
 
         # Plot the distance matrix
         fig, ax = plt.subplots(figsize=(10, 8))
@@ -260,7 +272,7 @@ if __name__ == "__main__":
         e = spatial_amplitude.spatial_amplitude(
             data=s,
             coupling=coupling,
-            d_map=result["maps"],  # Pass the distance map dictionaries directly
+            d_map=result["maps"],
             v=500,
             q=50,
             f=10,
@@ -274,7 +286,7 @@ if __name__ == "__main__":
         # Plot output
         fig, ax = plt.subplots(figsize=(10, 10))
 
-        # The result is now a MemoryFile, which can be used like a regular rasterio dataset
+        # The result is now a MemoryFile(regular rasterio dataset)
         with e.open() as dataset:
             e_data = dataset.read(1)
             im = ax.imshow(
@@ -340,7 +352,9 @@ if __name__ == "__main__":
         dt = t[1] - t[0]  # Time step
 
         # Convert distance maps to MemoryFile objects and open them
-        memory_files = [convert_to_memoryfile(map_data) for map_data in result["maps"]]
+        memory_files = [convert_to_memoryfile(
+            map_data
+        ) for map_data in result["maps"]]
 
         # Call spatial_migrate function
         migrated_result = spatial_migrate.spatial_migrate(
@@ -382,7 +396,13 @@ if __name__ == "__main__":
         for i, (x, y) in enumerate(sta):
             ax.plot(x, y, "ro", markersize=8)
             ax.text(
-                x, y, sta_ids[i], color="white", fontsize=12, ha="right", va="bottom"
+                x,
+                y,
+                sta_ids[i],
+                color="white",
+                fontsize=12,
+                ha="right",
+                va="bottom"
             )
         save_plot(fig, "Py_spatial_migration.png")
         plt.close()
@@ -410,7 +430,13 @@ if __name__ == "__main__":
         for i, (x, y) in enumerate(sta):
             ax.plot(x, y, "ro", markersize=8)
             ax.text(
-                x, y, sta_ids[i], color="white", fontsize=12, ha="right", va="bottom"
+                x,
+                y,
+                sta_ids[i],
+                color="white",
+                fontsize=12,
+                ha="right",
+                va="bottom"
             )
 
         plt.tight_layout()
@@ -458,6 +484,6 @@ if __name__ == "__main__":
         except PermissionError:
             print(f"Could not remove {dem_filepath}. It may still be in use.")
         except Exception as e:
-            print(f"An error occurred while trying to remove {dem_filepath}: {str(e)}")
+            print(f"An error occurred removing {dem_filepath}: {str(e)}")
 
 print("Script completed.")

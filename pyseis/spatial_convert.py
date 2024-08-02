@@ -36,7 +36,8 @@ def spatial_convert(data, from_proj, to_proj):
             data = data
         else:
             raise ValueError(
-                "Coordinate data must contain only 2 values (x and y) or 2 columns (x and y)!"
+                "Coordinate data must contain only 2 values (x and y) \
+                    or 2 columns (x and y)!"
             )
     elif isinstance(data, list):
         if len(data) == 2:
@@ -45,7 +46,8 @@ def spatial_convert(data, from_proj, to_proj):
             data = np.array(data)
         else:
             raise ValueError(
-                "Coordinate data must contain only 2 values (x and y) or 2 columns (x and y)!"
+                "Coordinate data must contain only 2 values (x and y) \
+                    or 2 columns (x and y)!"
             )
     else:
         raise ValueError("Input data must be a numpy.ndarray or a list!")

@@ -2,14 +2,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from concurrent.futures import ProcessPoolExecutor
 import multiprocessing
-import os
-import sys
-
-# Add the parent directory to the path to import custom functions
-script_directory = os.path.dirname(os.path.realpath(__file__))
-sys.path.append(os.path.join(script_directory, ".."))
-
-# Import the pre-implemented functions
 from pyseis import fmi_parameters, model_bedload, model_turbulence, fmi_spectra
 
 
@@ -50,7 +42,9 @@ def fmi_inversion(reference, data, n_cores=1):
 
     # Convert reference spectra and parameters to numpy arrays
     reference_spectra = np.array([x["power"] for x in reference])
-    reference_parameters = np.array([list(x["pars"].values()) for x in reference])
+    reference_parameters = np.array(
+        [list(x["pars"].values()) for x in reference]
+    )
 
     # Function to process a single spectrum
     def process_spectrum(psd):
@@ -84,8 +78,13 @@ def fmi_inversion(reference, data, n_cores=1):
     if not np.any(valid_indices):
         raise ValueError("No valid spectra found in the input data")
 
-    parameters_out = np.full((len(model_best), reference_parameters.shape[1]), np.nan)
-    parameters_out[valid_indices] = reference_parameters[model_best[valid_indices]]
+    parameters_out = np.full(
+        (len(model_best),
+         reference_parameters.shape[1]),
+        np.nan)
+    parameters_out[valid_indices] = reference_parameters[
+        model_best[valid_indices]
+        ]
 
     rmse = np.array([x["rmse_f"] for x in inversion])
 
@@ -120,8 +119,26 @@ def main():
     ref_spectra = fmi_spectra.fmi_spectra(parameters=ref_pars, n_cores=2)
 
     # Define water level and bedload flux time series
-    h = np.array([0.01, 1.00, 0.84, 0.60, 0.43, 0.32, 0.24, 0.18, 0.14, 0.11])
-    q = np.array([0.05, 5.00, 4.18, 3.01, 2.16, 1.58, 1.18, 0.89, 0.69, 0.54]) / 2650
+    h = np.array([0.01,
+                  1.00,
+                  0.84,
+                  0.60,
+                  0.43,
+                  0.32,
+                  0.24,
+                  0.18,
+                  0.14,
+                  0.11])
+    q = np.array([0.05,
+                  5.00,
+                  4.18,
+                  3.01,
+                  2.16,
+                  1.58,
+                  1.18,
+                  0.89,
+                  0.69,
+                  0.54]) / 2650
     hq = list(zip(h, q))
 
     # Calculate synthetic spectrogram

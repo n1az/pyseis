@@ -1,5 +1,4 @@
 import numpy as np
-from scipy import stats
 import pandas as pd
 
 
@@ -28,13 +27,16 @@ def model_bedload(
     """
     Model the seismic spectrum due to bedload transport in rivers.
 
-    This function calculates a seismic spectrum as predicted by the model of Tsai et al. (2012)
-    for river bedload transport. It's based on the R implementation by Sophie Lagarde and Michael Dietze.
+    This function calculates a seismic spectrum as predicted
+    by the model of Tsai et al. (2012)
+    for river bedload transport. It's based on the R implementation
+    by Sophie Lagarde and Michael Dietze.
 
     Parameters:
     -----------
     gsd : array-like, optional
-        Grain-size distribution function. Should be provided as a 2D array with two columns:
+        Grain-size distribution function.
+        Should be provided as a 2D array with two columns:
         grain-size class (in m) and weight/volume percentage per class.
     d_s : float, optional
         Mean sediment grain diameter (m). Alternative to gsd.
@@ -59,32 +61,39 @@ def model_bedload(
     q_0 : float
         Ground quality factor at f_0
     e_0 : float
-        Exponent characterizing quality factor increase with frequency (dimensionless)
+        Exponent characterizing quality factor increase
+        with frequency (dimensionless)
     v_0 : float
         Phase speed of the Rayleigh wave at f_0 (m/s)
     x_0 : float
-        Exponent of the power law variation of Rayleigh wave velocities with frequency
+        Exponent of the power law variation of Rayleigh wave
+        velocities with frequency
     n_0 : float or array-like
         Green's function displacement amplitude coefficients
     n_c : float, optional
         Option to include single particle hops coherent in time
     res : int, optional
-        Output resolution, i.e., length of the spectrum vector. Default is 100.
+        Output resolution, i.e., length of the spectrum vector.
+        Default is 100.
     adjust : bool, optional
-        Option to adjust PSD for wide grain-size distributions. Default is True.
+        Option to adjust PSD for wide grain-size distributions.
+        Default is True.
     **kwargs : dict, optional
         Additional parameters:
         - g : Gravitational acceleration (m/s^2). Default is 9.81.
         - r_w : Fluid specific density (kg/m^3). Default is 1000.
         - k_s : Roughness length (m). Default is 3 * d_s.
-        - log_lim : Limits of grain-size distribution function template. Default is (0.0001, 100).
-        - log_length : Length of grain-size distribution function template. Default is 10000.
+        - log_lim : Limits of grain-size distribution function template.
+            Default is (0.0001, 100).
+        - log_length : Length of grain-size distribution function template.
+            Default is 10000.
         - nu : Specific density of the fluid (kg/m^3). Default is 1e-6.
         - power_d : Grain-size power exponent. Default is 3.
         - gamma : Gamma parameter, after Parker (1990). Default is 0.9.
         - s_c : Drag coefficient parameter. Default is 0.8.
         - s_p : Drag coefficient parameter. Default is 3.5.
-        - c_1 : Inter-impact time scaling, after Sklar & Dietrich (2004). Default is 2/3.
+        - c_1 : Inter-impact time scaling, after Sklar & Dietrich (2004).
+            Default is 2/3.
 
     Returns:
     --------
@@ -95,22 +104,25 @@ def model_bedload(
 
     Notes:
     ------
-    When no user-defined grain-size distribution function is provided, the function
-    calculates the raised cosine distribution function as defined in Tsai et al. (2012).
+    When no user-defined grain-size distribution function is provided,
+    the function calculates the raised cosine distribution function as
+    defined in Tsai et al. (2012).
 
-    The adjustment option is only relevant for wide grain-size distributions, i.e., s_s > 0.2.
+    The adjustment option is only relevant for wide grain-size distributions,
+    i.e., s_s > 0.2.
     In such cases, the unadjusted version tends to underestimate seismic power.
 
     References:
     -----------
-    Tsai, V. C., B. Minchew, M. P. Lamb, and J.-P. Ampuero (2012), A physical model
-    for seismic noise generation from sediment transport in rivers,
-    Geophys. Res. Lett., 39, L02404, doi:10.1029/2011GL050255.
+    Tsai, V. C., B. Minchew, M. P. Lamb, and J.-P. Ampuero (2012),
+    A physical model for seismic noise generation from sediment transport
+    in rivers, Geophys. Res. Lett., 39, L02404, doi:10.1029/2011GL050255.
 
     Examples:
     ---------
-    >>> result = model_bedload(d_s=0.7, s_s=0.1, r_s=2650, q_s=0.001, h_w=4, w_w=50, a_w=0.005,
-    ...                        f=(0.1, 20), r_0=600, f_0=1, q_0=20, e_0=0, v_0=1295,
+    >>> result = model_bedload(d_s=0.7, s_s=0.1, r_s=2650, q_s=0.001, h_w=4,
+    ...                        w_w=50, a_w=0.005, f=(0.1, 20), r_0=600,
+    ...                        f_0=1, q_0=20, e_0=0, v_0=1295,
     ...                        x_0=0.374, n_0=1, res=100)
     >>> import matplotlib.pyplot as plt
     >>> plt.semilogx(result[:, 0], 10 * np.log10(result[:, 1]))
@@ -122,8 +134,6 @@ def model_bedload(
     g = kwargs.get("g", 9.81)
     r_w = kwargs.get("r_w", 1000)
     k_s = kwargs.get("k_s", 3 * d_s)
-    log_lim = kwargs.get("log_lim", (0.0001, 100))
-    log_length = kwargs.get("log_length", 10000)
     nu = kwargs.get("nu", 1e-6)
     power_d = kwargs.get("power_d", 3)
     gamma = kwargs.get("gamma", 0.9)
@@ -135,7 +145,7 @@ def model_bedload(
         x_log = np.logspace(np.log10(0.0001), np.log10(10), num=10000)
         s = s_s / np.sqrt(1 / 3 - 2 / np.pi**2)
         p_s = (
-            1 / (2 * s) * (1 + np.cos(np.pi * (np.log(x_log) - np.log(d_s)) / s))
+            1 / (2*s) * (1 + np.cos(np.pi * (np.log(x_log)-np.log(d_s)) / s))
         ) / x_log
         p_s[(np.log(x_log) - np.log(d_s)) > s] = 0
         p_s[(np.log(x_log) - np.log(d_s)) < -s] = 0
@@ -160,11 +170,10 @@ def model_bedload(
     u_m = 8.1 * u_s * (h_w / k_s) ** (1 / 6)
     chi = 0.407 * np.log(142 * np.tan(a_w))
     t_s_c50 = np.exp(
-        2.59e-2 * chi**4 + 8.94e-2 * chi**3 + 0.142 * chi**2 + 0.41 * chi - 3.14
+        2.59e-2*chi**4 + 8.94e-2*chi**3 + 0.142*chi**2 + 0.41*chi - 3.14
     )
 
     f_i = np.linspace(f[0], f[1], res)
-    q = q_0 * (f_i / f_0) ** e_0
     v_c = v_0 * (f_i / f_0) ** (-x_0)
     v_u = v_c / (1 + x_0)
     b = (2 * np.pi * r_0 * (1 + x_0) * f_i ** (1 + x_0 - e_0)) / (
@@ -187,7 +196,7 @@ def model_bedload(
         - (1 - s_c) ** 2.3 * np.tanh(s_x - 4.6)
         + 0.3 * (0.5 - s_c) * (1 - s_c) ** 2 * (s_x - 4.6)
     )
-    r_3 = (0.65 - ((s_c / 2.83) * np.tanh(s_x - 4.6))) ** (1 + ((3.5 - s_p) / 2.5))
+    r_3 = (0.65 - ((s_c/2.83) * np.tanh(s_x-4.6))) ** (1 + ((3.5-s_p) / 2.5))
     w_1 = r_3 * 10 ** (r_2 + r_1)
     w_2 = (r_b * g * nu * w_1) ** (1 / 3)
     c_d = (4 / 3) * (r_b * g * x_log) / (w_2**2)
@@ -222,12 +231,14 @@ def model_bedload(
             ) / (v_p * u_b * h_b * r_s**2 * v_c**3 * v_u**2)
 
         if adjust:
-            psd_f = np.sum(p_s * psd_raw * n_0**2 * np.diff(x_log, prepend=x_log[0]))
+            psd_f = np.sum(p_s * psd_raw * n_0**2 *
+                           np.diff(x_log, prepend=x_log[0]))
         else:
             psd_f = np.sum(p_s * psd_raw * n_0**2)
         return psd_f
 
-    z = np.array([calculate_psd(f, x, v, u) for f, x, v, u in zip(f_i, x_b, v_c, v_u)])
+    z = np.array([calculate_psd(f, x, v, u)
+                  for f, x, v, u in zip(f_i, x_b, v_c, v_u)])
 
     # Return the result as a pandas DataFrame
     return pd.DataFrame({"frequency": f_i, "power": z})

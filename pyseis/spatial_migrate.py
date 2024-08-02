@@ -1,8 +1,6 @@
 import numpy as np
 from scipy.signal import correlate
 import rasterio
-from rasterio import features
-from shapely.geometry import Point, LineString
 from rasterio.io import MemoryFile
 
 
@@ -17,16 +15,21 @@ def spatial_migrate(
 
     Parameters:
     data (numpy.ndarray or list): Seismic signals to cross-correlate.
-    d_stations (numpy.ndarray): Inter-station distances (output of `spatial_distance`).
-    d_map (list): Distance maps for each station (output of `spatial_distance`).
-    v (float or rasterio.io.DatasetReader): Mean velocity of seismic waves (m/s).
+    d_stations (numpy.ndarray): Inter-station distances
+                                (output of `spatial_distance`).
+    d_map (list): Distance map for each station (output of `spatial_distance`).
+    v (float/rasterio.io.DatasetReader): Mean velocity of seismic waves (m/s).
     dt (float): Sampling period.
-    snr (numpy.ndarray, optional): Signal-to-noise-ratios for each signal trace, used for normalization.
-    normalise (bool, optional): Option to normalize station correlations by signal-to-noise-ratios. Default is True.
-    verbose (bool, optional): Option to show extended function information as the function is running. Default is False.
+    snr (numpy.ndarray, optional): Signal-to-noise-ratios for each signal
+                                   trace, used for normalization.
+    normalise (bool, optional): Option to normalize station correlations by
+                                signal-to-noise-ratios. Default is True.
+    verbose (bool, optional): Option to show extended function information as
+                              the function is running. Default is False.
 
     Returns:
-    rasterio.io.DatasetReader: A raster with Gaussian probability density function values for each grid cell.
+    rasterio.io.DatasetReader: A raster with Gaussian probability density
+                               function values for each grid cell.
 
     """
     # Check/set data structure
@@ -36,7 +39,7 @@ def spatial_migrate(
             dt = data[0].meta.get("dt", None)
 
             if dt is None:
-                raise ValueError("Signal object seems to contain no valid data!")
+                raise ValueError("Signal object contains no valid data!")
 
             # Strip and organize signal vectors in matrix
             data = np.array([obj.signal for obj in data])
@@ -58,7 +61,8 @@ def spatial_migrate(
 
     if not isinstance(v, (float, rasterio.io.DatasetReader)):
         raise ValueError(
-            "Velocity must be a numeric value or a rasterio.io.DatasetReader object!"
+            "Velocity must be a numeric value \
+            or a rasterio.io.DatasetReader object!"
         )
 
     # Assign SNR values for normalization
@@ -83,11 +87,9 @@ def spatial_migrate(
     # Normalize input signals
     data = (data - s_min[:, np.newaxis]) / (s_max - s_min)[:, np.newaxis]
 
-    # Calculate signal duration
-    duration = data.shape[1] * dt
-
     # Get combinations of stations
-    pairs = [(i, j) for i in range(data.shape[0]) for j in range(i + 1, data.shape[0])]
+    pairs = [(i, j) for i in range(data.shape[0])
+             for j in range(i + 1, data.shape[0])]
 
     # Build raster objects from map metadata
     with rasterio.Env():
@@ -138,14 +140,17 @@ def spatial_migrate(
 
             # Calculate modeled and empirical lag times
             try:
-                lag_model = (d_map[pair[0]].read(1) - d_map[pair[1]].read(1)) / v_lag
+                lag_model = (d_map[pair[0]].read(1)
+                             - d_map[pair[1]].read(1)) / v_lag
                 lag_empiric = d_stations[pair] / v_lag
             except Exception as e:
                 print(f"Error reading distance map for pair {pair}: {e}")
                 raise
 
             # Calculate source density map
-            cors_map = np.exp(-0.5 * (((lag_model - t_max) / lag_empiric) ** 2)) * norm
+            cors_map = np.exp(
+                -0.5 * (((lag_model - t_max) / lag_empiric) ** 2)
+            ) * norm
 
             if maps_sum is None:
                 maps_sum = cors_map

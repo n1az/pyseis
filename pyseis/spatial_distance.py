@@ -8,19 +8,27 @@ import matplotlib.pyplot as plt
 
 
 def spatial_distance(
-    stations, dem, topography=True, maps=True, matrix=True, aoi=None, verbose=False
+    stations, dem,
+    topography=True,
+    maps=True,
+    matrix=True,
+    aoi=None,
+    verbose=False
 ):
     """
-    Calculate spatial distances between weather stations considering topography.
+    Calculate spatial distances between weather stations
+    considering topography.
 
-    This function computes distances between weather stations, optionally considering
-    topography. It can generate distance maps for each station and a distance matrix
+    This function computes distances between weather stations,
+    optionally considering topography.
+    It can generate distance maps for each station and a distance matrix
     between all stations.
 
     Parameters:
     -----------
     stations : numpy.ndarray
-        Array of station coordinates, shape (n, 2) where n is the number of stations.
+        Array of station coordinates, shape (n, 2)
+        where n is the number of stations.
     dem : str
         Path to the Digital Elevation Model (DEM) file.
     topography : bool, optional
@@ -28,9 +36,11 @@ def spatial_distance(
     maps : bool, optional
         If True, generate distance maps for each station. Default is True.
     matrix : bool, optional
-        If True, generate a distance matrix between all stations. Default is True.
+        If True, generate a distance matrix between all stations.
+        Default is True.
     aoi : list, optional
-        Area of Interest extent [left, right, bottom, top]. If None, use full DEM extent.
+        Area of Interest extent [left, right, bottom, top].
+        If None, use full DEM extent.
     verbose : bool, optional
         If True, print processing information. Default is False.
 
@@ -38,7 +48,8 @@ def spatial_distance(
     --------
     dict
         A dictionary containing:
-        - 'maps': List of dictionaries, each containing distance map data for a station.
+        - 'maps': List of dictionaries, each containing distance
+                  map data for a station.
         - 'matrix': numpy.ndarray, distance matrix between all stations.
 
     Raises:
@@ -47,15 +58,12 @@ def spatial_distance(
         If DEM contains NA values, station coordinates are outside DEM extent,
         or AOI extent is beyond DEM extent.
     """
-    # PART 0 - check input data ------------------------------------------------
+    # PART 0 - check input data
     # open DEM file
     with rasterio.open(dem) as src:
         # check if DEM contains NA values
         if np.any(src.read(1) != src.read(1)):
             raise ValueError("DEM contains NA values!")
-
-        # extract coordinates from DEM
-        xy_dem = np.array(list(zip(*np.meshgrid(range(src.width), range(src.height)))))
 
         # check if station coordinates are within DEM extent
         if np.any(
@@ -64,7 +72,7 @@ def spatial_distance(
             or stations[:, 1].min() < src.bounds.bottom
             or stations[:, 1].max() > src.bounds.top
         ):
-            raise ValueError("Some station coordinates are outside DEM extent!")
+            raise ValueError("Some station coordinates are outside DEM extent")
 
         # check/set aoi extent
         if aoi is None:
@@ -86,7 +94,7 @@ def spatial_distance(
         ):
             raise ValueError("AOI extent is beyond DEM extent!")
 
-        # PART 1 - calculate distance maps -----------------------------------------
+        # PART 1 - calculate distance maps
         if maps:
             # define aoi raster and set values to zero
             aoi_rst = np.zeros((src.height, src.width))
@@ -140,10 +148,14 @@ def spatial_distance(
                             list(
                                 zip(
                                     np.linspace(
-                                        xy_stat[0], aoi_xy[j // src.width, 0], n_int
+                                        xy_stat[0],
+                                        aoi_xy[j // src.width, 0],
+                                        n_int
                                     ),
                                     np.linspace(
-                                        xy_stat[1], aoi_xy[j // src.width, 1], n_int
+                                        xy_stat[1],
+                                        aoi_xy[j // src.width, 1],
+                                        n_int
                                     ),
                                 )
                             )
@@ -171,17 +183,17 @@ def spatial_distance(
                             z_dir[i_dir] = z_int[i_dir]
 
                         # calculate path length
-                        l = np.sum(
+                        l_0 = np.sum(
                             np.sqrt(
                                 np.sum((xy_pts[1:] - xy_pts[:-1]) ** 2, axis=1)
                                 + (z_dir[1:] - z_dir[:-1]) ** 2
                             )
                         )
                     else:
-                        l = np.nan
+                        l_0 = np.nan
 
                     # store distance map entry
-                    d[j] = l
+                    d[j] = l_0
                     idx += 1
 
                 # Store the map data in memory
@@ -211,12 +223,20 @@ def spatial_distance(
 
             # Create a GeoDataFrame from the DEM extent
             dem_bounds = box(
-                src.bounds.left, src.bounds.bottom, src.bounds.right, src.bounds.top
+                src.bounds.left,
+                src.bounds.bottom,
+                src.bounds.right,
+                src.bounds.top
             )
             dem_gdf = gpd.GeoDataFrame({"geometry": [dem_bounds]}, crs=src.crs)
 
             # extract elevation data for stations
-            xyz_stat = gpd.sjoin(xy_stat, dem_gdf, how="left", predicate="within")
+            xyz_stat = gpd.sjoin(
+                xy_stat,
+                dem_gdf,
+                how="left",
+                predicate="within"
+            )
             xyz_stat["z"] = [
                 src.read(1)[src.index(point.x, point.y)]
                 for point in xyz_stat["geometry"]
@@ -237,14 +257,23 @@ def spatial_distance(
                     xy_pts = np.array(
                         list(
                             zip(
-                                np.linspace(stations[i, 0], stations[j, 0], n_int),
-                                np.linspace(stations[i, 1], stations[j, 1], n_int),
+                                np.linspace(
+                                    stations[i, 0],
+                                    stations[j, 0],
+                                    n_int
+                                ),
+                                np.linspace(
+                                    stations[i, 1],
+                                    stations[j, 1],
+                                    n_int
+                                ),
                             )
                         )
                     )
 
                     # extract elevation data along line
-                    z_int = np.array([src.read(1)[src.index(x, y)] for x, y in xy_pts])
+                    z_int = np.array([src.read(1)[src.index(x, y)]
+                                      for x, y in xy_pts])
 
                     # interpolate straight line elevation
                     z_dir = np.linspace(z_int[0], z_int[-1], n_int)
@@ -269,10 +298,12 @@ def spatial_distance(
 if __name__ == "__main__":
 
     # Example code to run the function
-    stations = np.array([[25, 25], [75, 75], [50, 50]])  # Example station coordinates
+    # Example station coordinates
+    stations = np.array([[25, 25], [75, 75], [50, 50]])
 
     # Create a temporary DEM file
-    dem_data = np.random.rand(100, 100) * 1000  # 100x100 DEM with random elevation data
+    # 100x100 DEM with random elevation data
+    dem_data = np.random.rand(100, 100) * 1000
     dem_path = "temporary_dem.tif"
     with rasterio.open(
         dem_path,

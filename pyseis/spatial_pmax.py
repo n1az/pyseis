@@ -7,7 +7,8 @@ def spatial_pmax(data):
     Get the most likely source location.
 
     Parameters:
-    data (numpy.ndarray or rasterio.io.MemoryFile): Spatial data with source location estimates.
+    data (numpy.ndarray or rasterio.io.MemoryFile): Spatial data with source
+                                                    location estimates.
 
     Returns:
     numpy.ndarray: Coordinates of the most likely source location(s).
@@ -37,7 +38,9 @@ def spatial_pmax(data):
     # Convert indices to coordinates
     if transform:
         # Use rasterio's transform to get real-world coordinates
-        max_locations = [np.array(rasterio.transform.xy(transform, *max_indices))]
+        max_locations = [np.array(rasterio.transform.xy(
+            transform, *max_indices
+        ))]
     else:
         # Use array indices as coordinates
         max_locations = [np.array(max_indices)]
