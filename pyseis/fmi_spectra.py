@@ -1,6 +1,3 @@
-# import
-from pyseis import fmi_parameters, model_bedload, model_turbulence
-
 import numpy as np
 from concurrent.futures import ProcessPoolExecutor
 import multiprocessing
@@ -231,7 +228,6 @@ if __name__ == "__main__":
             f'Spectrum {i+1} (h_w: {spectrum["pars"]["h_w"]:.2f} \
                 m, q_s: {spectrum["pars"]["q_s"]:.6f} m^2/s)'
         )
-
         plt.legend()
         plt.xscale("log")
         plt.grid(True)
