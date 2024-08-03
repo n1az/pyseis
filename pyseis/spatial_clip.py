@@ -1,5 +1,4 @@
 import numpy as np
-import rasterio
 from rasterio.io import MemoryFile
 
 
@@ -14,7 +13,7 @@ def spatial_clip(data, quantile, replace=np.nan, normalise=True):
     quantile (float): Quantile value below which raster values are clipped.
     replace (float, optional): Replacement value. Default is `np.nan`.
     normalise (bool, optional): Optionally normalize values above threshold
-    quantile between 0 and 1. Default is True.
+                                quantile between 0 and 1. Default is True.
 
     Returns:
     rasterio.io.DatasetReader: Data set with clipped values.
