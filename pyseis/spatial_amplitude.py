@@ -8,7 +8,8 @@ import multiprocessing as mp
 
 def model_fun(params, d, a_d, f, q, v):
     a_0 = params[0]
-    return a_d - a_0 / np.sqrt(d.sum()) * np.exp(-((np.pi * f * d.sum()) / (q * v)))
+    return a_d - a_0 / np.sqrt(d.sum()) * np.exp(-((np.pi * f * d.sum())
+                                                   / (q * v)))
 
 
 def _process_pixel(args):
@@ -18,7 +19,8 @@ def _process_pixel(args):
             res = 1 - (
                 np.sum(
                     least_squares(
-                        model_fun, model_start, args=(d, a_d, f, q, v), loss="soft_l1"
+                        model_fun, model_start, args=(d, a_d, f, q, v),
+                        loss="soft_l1"
                     ).fun
                     ** 2
                 )
@@ -27,12 +29,14 @@ def _process_pixel(args):
         elif output == "residuals":
             res = np.sum(
                 least_squares(
-                    model_fun, model_start, args=(d, a_d, f, q, v), loss="soft_l1"
+                    model_fun, model_start, args=(d, a_d, f, q, v),
+                    loss="soft_l1"
                 ).fun
                 ** 2
             )
         else:
-            raise ValueError("Invalid output type. Must be 'residuals' or 'variance'.")
+            raise ValueError("Invalid output type. Must be
+                             'residuals' or 'variance'.")
     else:
         res = np.nan
     return res
@@ -52,23 +56,32 @@ def spatial_amplitude(
     cpu=None,
 ):
     """
-    Locate the source of a seismic event by modeling amplitude attenuation.
+    Locate the source of a seismic event by modeling
+    amplitude attenuation.
 
     Parameters:
-    data (list or numpy.ndarray): Seismic signals to work with (usually envelopes).
-    coupling (numpy.ndarray): Coupling efficiency factors for each seismic station.
-    d_map (list): List of dictionaries containing distance maps for each station.
-    aoi (rasterio.io.DatasetReader, optional): A raster that defines which pixels are used to locate the source.
+    data (list or numpy.ndarray): Seismic signals to work with
+                                    (usually envelopes).
+    coupling (numpy.ndarray): Coupling efficiency factors for
+                                each seismic station.
+    d_map (list): List of dictionaries
+                    containing distance maps for each station.
+    aoi (rasterio.io.DatasetReader, optional): A raster that
+                defines which pixels are used to locate the source.
     v (float): Mean velocity of seismic waves (m/s).
     q (float): Quality factor of the ground.
     f (float): Frequency for which to model the attenuation.
     a_0 (float, optional): Start parameter of the source amplitude.
-    normalise (bool, optional): Option to normalize sum of residuals between 0 and 1. Default is True.
-    output (str, optional): Type of metric the function returns ("residuals" or "variance"). Default is "variance".
-    cpu (float, optional): Fraction of CPUs to use. If omitted, only one CPU will be used.
+    normalise (bool, optional): Option to normalize sum of residuals
+                                between 0 and 1. Default is True.
+    output (str, optional): Type of metric the function returns
+                            ("residuals" or "variance"). Default is "variance".
+    cpu (float, optional): Fraction of CPUs to use. If omitted,
+                            only one CPU will be used.
 
     Returns:
-    rasterio.io.MemoryFile: A raster with the location output metrics for each grid cell.
+    rasterio.io.MemoryFile: A raster with the location output metrics
+    for each grid cell.
 
     """
     # Debugging: Print shapes and types of input data
@@ -88,7 +101,8 @@ def spatial_amplitude(
         coupling = np.ones(len(data_list))
 
     # Get maximum amplitude
-    a_d = np.array([max(data["signal"]) for data in data_list]) * (1 / coupling)
+    a_d = np.array([max(data["signal"]) for data in data_list])
+    * (1 / coupling)
 
     # Check/set source amplitude
     if a_0 is None:
