@@ -131,8 +131,7 @@ def spatial_migrate(
 
             # Calculate SNR normalization factor
             if normalise:
-                norm = ((s_snr[pair[0]] + s_snr[pair[1]]) / 2) /
-                np.mean(s_snr)
+                norm = ((s_snr[pair[0]] + s_snr[pair[1]]) / 2) / np.mean(s_snr)
             else:
                 norm = 1
 

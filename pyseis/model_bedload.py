@@ -41,8 +41,7 @@ def model_bedload(
     d_s : float, optional
         Mean sediment grain diameter (m). Alternative to gsd.
     s_s : float, optional
-        Standard deviation of sediment grain diameter (m).
-        Alternative to gsd.
+        Standard deviation of sediment grain diameter (m). Alternative to gsd.
     r_s : float
         Specific sediment density (kg/m^3)
     q_s : float
@@ -180,8 +179,7 @@ def model_bedload(
     b = (2 * np.pi * r_0 * (1 + x_0) * f_i ** (1 + x_0 - e_0)) / (
         v_0 * q_0 * f_0 ** (x_0 - e_0)
     )
-    x_b = 2 * np.log(1 + (1 / b)) * np.exp(-2 * b) + (1 - np.exp(-b)) *
-    np.exp(
+    x_b = 2 * np.log(1 + (1 / b)) * np.exp(-2 * b) + (1 - np.exp(-b)) * np.exp(
         -b
     ) * np.sqrt(2 * np.pi / b)
 

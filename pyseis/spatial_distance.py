@@ -32,8 +32,7 @@ def spatial_distance(
     dem : str
         Path to the Digital Elevation Model (DEM) file.
     topography : bool, optional
-        If True, consider topography in distance calculations.
-        Default is True.
+        If True, consider topography in distance calculations. Default is True.
     maps : bool, optional
         If True, generate distance maps for each station. Default is True.
     matrix : bool, optional

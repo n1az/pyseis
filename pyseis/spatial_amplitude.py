@@ -58,8 +58,7 @@ def spatial_amplitude(
     cpu=None,
 ):
     """
-    Locate the source of a seismic event by modeling
-    amplitude attenuation.
+    Locate the source of a seismic event by modeling amplitude attenuation.
 
     Parameters:
     data (list or numpy.ndarray): Seismic signals (usually envelopes).

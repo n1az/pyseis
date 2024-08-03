@@ -1,8 +1,3 @@
-# import
-
-# Import the pre-implemented functions
-from pyseis import fmi_parameters, model_bedload, model_turbulence, fmi_spectra
-
 import numpy as np
 import matplotlib.pyplot as plt
 from concurrent.futures import ProcessPoolExecutor
