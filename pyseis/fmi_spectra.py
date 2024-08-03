@@ -1,3 +1,6 @@
+# import
+from pyseis import fmi_parameters, model_bedload, model_turbulence
+
 import numpy as np
 from concurrent.futures import ProcessPoolExecutor
 import multiprocessing
@@ -8,8 +11,6 @@ import sys
 # Add the parent directory to the path to import custom functions
 script_directory = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.join(script_directory, ".."))
-
-from pyseis import fmi_parameters, model_bedload, model_turbulence
 
 
 def f(parameters):
@@ -76,36 +77,39 @@ def f(parameters):
 
 def fmi_spectra(parameters, n_cores=1):
     """
-    Create reference model spectra catalogue for fluvial model inversion (FMI) routine.
+    Create reference model spectra catalogue for
+    fluvial model inversion (FMI) routine.
 
-    This function calculates reference spectra based on predefined model parameters.
-    It can utilize multiple CPU cores for parallel processing.
+    This function calculates reference spectra based on predefined
+    model parameters. It can utilize multiple CPU cores for parallel
+    processing.
 
     Parameters:
     -----------
     parameters : list of dict
-        List containing dictionaries with model parameters for which the spectra
-        shall be calculated.
+        List containing dictionaries with model parameters for which
+        the spectra shall be calculated.
     n_cores : int, optional
-        Number of CPU cores to use. Parallel processing is disabled by setting to 1.
-        Default is 1.
+        Number of CPU cores to use. Parallel processing is disabled
+        by setting to 1. Default is 1.
 
     Returns:
     --------
     list of dict
-        List of dictionaries containing the calculated reference spectra and the
-        corresponding input parameters. The spectra are given in dB for seamless
-        comparison with the empirical PSD data, while the original output of the
-        models are in linear scale.
+        List of dictionaries containing the calculated reference spectra
+        and the corresponding input parameters. The spectra are given
+        in dB for seamless comparison with the empirical PSD data, while
+        the original output of the models are in linear scale.
 
     Notes:
     ------
-    This function requires the implementation of `model_turbulence` and `model_bedload`
-    functions, which should be imported from another module.
+    This function requires the implementation of `model_turbulence` and
+    `model_bedload` functions, which should be imported from another module.
 
     Example:
     --------
-    >>> ref_pars = fmi_parameters(n=2, h_w=[0.02, 2.00], q_s=[0.001/2650, 50.000/2650], ...)
+    >>> ref_pars = fmi_parameters(n=2, h_w=[0.02, 2.00], q_s=[0.001/2650,
+                                    50.000/2650], ...)
     >>> ref_spectra = fmi_spectra(parameters=ref_pars, n_cores=4)
     """
     if n_cores > 1:
@@ -160,7 +164,9 @@ if __name__ == "__main__":
                 and len(spectrum["frequency"]) > 0
             ):
                 print(
-                    f"  Frequency range: {spectrum['frequency'][0]} - {spectrum['frequency'][-1]} Hz"
+                    f"  Frequency range: {
+                        spectrum['frequency'][0]
+                        } - {spectrum['frequency'][-1]} Hz"
                 )
             else:
                 print(f"  Frequency: {spectrum['frequency']}")
@@ -173,7 +179,9 @@ if __name__ == "__main__":
                 and len(spectrum["power"]) > 0
             ):
                 print(
-                    f"  Power range: {min(spectrum['power']):.2f} - {max(spectrum['power']):.2f} dB"
+                    f"  Power range: {
+                        min(spectrum['power']): .2f
+                        } - {max(spectrum['power']): .2f} dB"
                 )
             else:
                 print(f"  Power: {spectrum['power']}")
@@ -183,7 +191,8 @@ if __name__ == "__main__":
     # Plotting
     plt.figure(figsize=(12, 8))
     for i, spectrum in enumerate(ref_spectra):
-        plt.plot(spectrum["frequency"], spectrum["power"], label=f"Spectrum {i+1}")
+        plt.plot(spectrum["frequency"], spectrum["power"],
+                 label=f"Spectrum {i+1}")
         plt.plot(
             spectrum["frequency"],
             spectrum["turbulence"],
@@ -217,13 +226,16 @@ if __name__ == "__main__":
             linestyle="--",
         )
         plt.plot(
-            spectrum["frequency"], spectrum["bedload"], label="Bedload", linestyle=":"
+            spectrum["frequency"], spectrum["bedload"],
+            label="Bedload", linestyle=":"
         )
         plt.xlabel("Frequency (Hz)")
         plt.ylabel("Power Spectral Density (dB)")
         plt.title(
-            f'Spectrum {i+1} (h_w: {spectrum["pars"]["h_w"]:.2f} m, q_s: {spectrum["pars"]["q_s"]:.6f} m^2/s)'
+            f'Spectrum {i+1}(h_w: {spectrum["pars"]["h_w"]:.2f} m, q_s: '
+            f'{spectrum["pars"]["q_s"]:.6f} m^2/s)'
         )
+
         plt.legend()
         plt.xscale("log")
         plt.grid(True)
