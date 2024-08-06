@@ -352,19 +352,19 @@ For station A,B and C we tested these following modules:
     <tr>
       <th>0</th>
       <td>0.000000</td>
-      <td>186.271544</td>
-      <td>236.601279</td>
+      <td>173.814417</td>
+      <td>277.666798</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>186.271544</td>
+      <td>173.814417</td>
       <td>0.000000</td>
-      <td>136.925337</td>
+      <td>121.704477</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>236.601279</td>
-      <td>136.925337</td>
+      <td>277.666798</td>
+      <td>121.704477</td>
       <td>0.000000</td>
     </tr>
   </tbody>
@@ -435,7 +435,7 @@ For station A,B and C we tested these following modules:
     <tr>
       <th>0</th>
       <td>0.5</td>
-      <td>91.5</td>
+      <td>97.5</td>
     </tr>
   </tbody>
 </table>
@@ -471,7 +471,7 @@ For station A,B and C we tested these following modules:
     Clipped migrated data summary:
     Min value: 0.0
     Max value: 1.0
-    Mean value: 0.6892159495892944
+    Mean value: 0.6007319132877912
     
 
 ## Functions for Fluival data handling
@@ -497,10 +497,10 @@ We tested these following modules:
     1          d_s     0.010000     0.010000
     2          s_s     1.350000     1.350000
     3          r_s  2650.000000  2650.000000
-    4          q_s     0.017234     0.002259
+    4          q_s     0.014961     0.003393
     5          w_w     6.000000     6.000000
     6          a_w     0.007500     0.007500
-    7          h_w     0.912263     1.855273
+    7          h_w     0.325588     1.331576
     8        f_min     5.000000     5.000000
     9        f_max    80.000000    80.000000
     10         r_0     6.000000     6.000000
@@ -548,111 +548,111 @@ We tested these following modules:
   <tbody>
     <tr>
       <th>0</th>
-      <td>r_s</td>
-      <td>2650.000000</td>
-      <td>2650.000000</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>a_w</td>
-      <td>0.007500</td>
-      <td>0.007500</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>p_0</td>
-      <td>0.550000</td>
-      <td>0.550000</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>h_w</td>
-      <td>1.608711</td>
-      <td>1.656022</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>w_w</td>
-      <td>6.000000</td>
-      <td>6.000000</td>
-    </tr>
-    <tr>
-      <th>5</th>
-      <td>q_0</td>
-      <td>10.000000</td>
-      <td>10.000000</td>
-    </tr>
-    <tr>
-      <th>6</th>
       <td>res</td>
       <td>100.000000</td>
       <td>100.000000</td>
     </tr>
     <tr>
-      <th>7</th>
-      <td>v_0</td>
-      <td>350.000000</td>
-      <td>350.000000</td>
+      <th>1</th>
+      <td>d_s</td>
+      <td>0.010000</td>
+      <td>0.010000</td>
     </tr>
     <tr>
-      <th>8</th>
-      <td>s_s</td>
-      <td>1.350000</td>
-      <td>1.350000</td>
-    </tr>
-    <tr>
-      <th>9</th>
-      <td>r_0</td>
-      <td>6.000000</td>
-      <td>6.000000</td>
-    </tr>
-    <tr>
-      <th>10</th>
-      <td>f_0</td>
-      <td>1.000000</td>
-      <td>1.000000</td>
-    </tr>
-    <tr>
-      <th>11</th>
-      <td>f_max</td>
-      <td>80.000000</td>
-      <td>80.000000</td>
-    </tr>
-    <tr>
-      <th>12</th>
+      <th>2</th>
       <td>e_0</td>
       <td>0.090000</td>
       <td>0.090000</td>
     </tr>
     <tr>
-      <th>13</th>
-      <td>n_0_a</td>
-      <td>0.600000</td>
-      <td>0.600000</td>
+      <th>3</th>
+      <td>p_0</td>
+      <td>0.550000</td>
+      <td>0.550000</td>
     </tr>
     <tr>
-      <th>14</th>
-      <td>n_0_b</td>
-      <td>0.800000</td>
-      <td>0.800000</td>
-    </tr>
-    <tr>
-      <th>15</th>
+      <th>4</th>
       <td>f_min</td>
       <td>5.000000</td>
       <td>5.000000</td>
     </tr>
     <tr>
-      <th>16</th>
+      <th>5</th>
+      <td>s_s</td>
+      <td>1.350000</td>
+      <td>1.350000</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>r_0</td>
+      <td>6.000000</td>
+      <td>6.000000</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>q_0</td>
+      <td>10.000000</td>
+      <td>10.000000</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>f_max</td>
+      <td>80.000000</td>
+      <td>80.000000</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>n_0_a</td>
+      <td>0.600000</td>
+      <td>0.600000</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>n_0_b</td>
+      <td>0.800000</td>
+      <td>0.800000</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>v_0</td>
+      <td>350.000000</td>
+      <td>350.000000</td>
+    </tr>
+    <tr>
+      <th>12</th>
       <td>q_s</td>
-      <td>0.018103</td>
-      <td>0.010340</td>
+      <td>0.007026</td>
+      <td>0.003804</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>a_w</td>
+      <td>0.007500</td>
+      <td>0.007500</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>h_w</td>
+      <td>1.792008</td>
+      <td>0.270599</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>r_s</td>
+      <td>2650.000000</td>
+      <td>2650.000000</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>w_w</td>
+      <td>6.000000</td>
+      <td>6.000000</td>
     </tr>
     <tr>
       <th>17</th>
-      <td>d_s</td>
-      <td>0.010000</td>
-      <td>0.010000</td>
+      <td>f_0</td>
+      <td>1.000000</td>
+      <td>1.000000</td>
     </tr>
   </tbody>
 </table>
@@ -696,27 +696,27 @@ We tested these following modules:
     <tr>
       <th>1</th>
       <td>5.000000</td>
-      <td>-127.608937</td>
+      <td>-142.099778</td>
     </tr>
     <tr>
       <th>2</th>
       <td>5.757576</td>
-      <td>-126.308045</td>
+      <td>-140.924042</td>
     </tr>
     <tr>
       <th>3</th>
       <td>6.515152</td>
-      <td>-125.246228</td>
+      <td>-139.969065</td>
     </tr>
     <tr>
       <th>4</th>
       <td>7.272727</td>
-      <td>-124.366681</td>
+      <td>-139.182238</td>
     </tr>
     <tr>
       <th>5</th>
       <td>8.030303</td>
-      <td>-123.630592</td>
+      <td>-138.527855</td>
     </tr>
   </tbody>
 </table>
@@ -759,37 +759,37 @@ We tested these following modules:
     <tr>
       <th>0</th>
       <td>5.000000</td>
-      <td>-120.050781</td>
-      <td>-120.050781</td>
-      <td>-123.656035</td>
+      <td>-118.641341</td>
+      <td>-118.641341</td>
+      <td>-128.228590</td>
     </tr>
     <tr>
       <th>1</th>
       <td>5.757576</td>
-      <td>-118.677461</td>
-      <td>-118.677461</td>
-      <td>-120.654312</td>
+      <td>-117.254051</td>
+      <td>-117.254051</td>
+      <td>-125.226867</td>
     </tr>
     <tr>
       <th>2</th>
       <td>6.515152</td>
-      <td>-117.553299</td>
-      <td>-117.553299</td>
-      <td>-118.064597</td>
+      <td>-116.117800</td>
+      <td>-116.117800</td>
+      <td>-122.637152</td>
     </tr>
     <tr>
       <th>3</th>
       <td>7.272727</td>
-      <td>-116.619294</td>
-      <td>-116.619294</td>
-      <td>-115.795135</td>
+      <td>-115.173193</td>
+      <td>-115.173193</td>
+      <td>-120.367690</td>
     </tr>
     <tr>
       <th>4</th>
       <td>8.030303</td>
-      <td>-115.835051</td>
-      <td>-115.835051</td>
-      <td>-113.781753</td>
+      <td>-114.379546</td>
+      <td>-114.379546</td>
+      <td>-118.354308</td>
     </tr>
   </tbody>
 </table>
