@@ -7,7 +7,8 @@ min_version("6.0")
 
 # Configuration
 R_SCRIPTS = ["rscript"]
-PY_SCRIPTS = ["test_spatials", "test_fmi_models"]
+# test scripts
+PY_SCRIPTS = ["test_spatial", "test_fmi"]
 NB_FILES = ["analysis"]
 
 # Output directory
@@ -20,6 +21,7 @@ rule all:
     input:
         expand(f"{OUTPUT_DIR}/R_{{script}}.txt", script=R_SCRIPTS),
         expand(f"{OUTPUT_DIR}/py_{{script}}.txt", script=PY_SCRIPTS),
+        expand(f"{OUTPUT_DIR}/pyseis_{{script}}.txt", script=glob_wildcards("pyseis/{script}.py").script),
         expand(f"{OUTPUT_DIR}/{{notebook}}.md", notebook=NB_FILES)
 
 rule clean:
@@ -27,7 +29,7 @@ rule clean:
         touch(temp(f"{OUTPUT_DIR}/.cleaned"))
     run:
         import glob
-        patterns = [f"{OUTPUT_DIR}/R_*.txt", f"{OUTPUT_DIR}/py_*.txt", f"{OUTPUT_DIR}/*.html", f"{LOG_DIR}/*"]
+        patterns = [f"{OUTPUT_DIR}/R_*.txt", f"{OUTPUT_DIR}/py_*.txt", f"{OUTPUT_DIR}/pyseis_*.txt", f"{OUTPUT_DIR}/*.html", f"{LOG_DIR}/*"]
         for pattern in patterns:
             for file in glob.glob(pattern):
                 os.remove(file)
@@ -44,7 +46,7 @@ rule run_rscript:
     shell:
         "Rscript {input.script} > {log} 2>&1"
 
-rule run_python_script:
+rule run_test_script:
     input:
         script = "test/{script}.py",
         cleaned = f"{OUTPUT_DIR}/.cleaned"
@@ -52,6 +54,17 @@ rule run_python_script:
         touch(temp(f"{OUTPUT_DIR}/py_{{script}}.txt"))
     log:
         f"{LOG_DIR}/py_{{script}}.log"
+    shell:
+        "python {input.script} > {log} 2>&1"
+
+rule run_translated_components:
+    input:
+        script = "pyseis/{script}.py",
+        cleaned = f"{OUTPUT_DIR}/.cleaned"
+    output:
+        touch(temp(f"{OUTPUT_DIR}/pyseis_{{script}}.txt"))
+    log:
+        f"{LOG_DIR}/pyseis_{{script}}.log"
     shell:
         "python {input.script} > {log} 2>&1"
 

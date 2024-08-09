@@ -1,5 +1,7 @@
+import argparse
 import numpy as np
 import rasterio
+from pyseis import spatial_amplitude
 
 
 def spatial_pmax(data):
@@ -50,31 +52,33 @@ def spatial_pmax(data):
 
 # Example
 if __name__ == "__main__":
+    # Set up argument parser
+    parser = argparse.ArgumentParser(
+        description='Spatial Pmax example.')
+    parser.add_argument(
+        '--size',
+        type=int,
+        default=100,
+        help='Size of numpy array')
+    parser.add_argument(
+        '--use-mem',
+        action='store_true',
+        help='Use memoryfile')
+
+    # Parse command line arguments
+    args = parser.parse_args()
+
     # Example usage with numpy array
-    example_data = np.random.rand(100, 100)
-    max_locations = spatial_pmax(example_data)
-    print("Most likely source location(s) for numpy array:")
-    for loc in max_locations:
-        print(loc)
-
-    # Example usage with rasterio MemoryFile
-    from rasterio.transform import from_origin
-    from rasterio.io import MemoryFile
-
-    with MemoryFile() as memfile:
-        with memfile.open(
-            driver="GTiff",
-            height=100,
-            width=100,
-            count=1,
-            dtype=np.float32,
-            crs="+proj=latlong",
-            transform=from_origin(0, 0, 1, 1),
-        ) as dataset:
-            data = np.random.rand(100, 100).astype(np.float32)
-            dataset.write(data, 1)
-
-        max_locations = spatial_pmax(memfile)
-        print("\nMost likely source location(s) for rasterio MemoryFile:")
+    if args.use_mem:
+        e_max = spatial_pmax(
+            spatial_amplitude.example_run()
+        )
+        print("Most likely source location(s) for memoryfile:")
+        for loc in e_max:
+            print(loc)
+    else:
+        example_data = np.random.rand(args.size, args.size)
+        max_locations = spatial_pmax(example_data)
+        print("Most likely source location(s) for numpy array:")
         for loc in max_locations:
             print(loc)

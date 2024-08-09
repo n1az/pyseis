@@ -1,7 +1,10 @@
+import argparse
 import numpy as np
 from scipy.signal import correlate
+from scipy.stats import norm
 import rasterio
 from rasterio.io import MemoryFile
+from pyseis import spatial_distance
 
 
 def spatial_migrate(
@@ -169,3 +172,90 @@ def spatial_migrate(
 
     # Return output
     return map_out
+
+
+def convert_to_memoryfile(map_data):
+    """
+    Convert a distance map dictionary to a MemoryFile object.
+
+    Args:
+        map_data (dict): Dictionary containing the distance map data.
+
+    Returns:
+        rasterio.io.MemoryFile: Opened MemoryFile dataset.
+    """
+    profile = {
+        "driver": "GTiff",
+        "height": map_data["values"].shape[0],
+        "width": map_data["values"].shape[1],
+        "count": 1,
+        "dtype": map_data["values"].dtype,
+        "crs": map_data["crs"],
+        "transform": map_data["transform"],
+    }
+    memfile = MemoryFile()
+    with memfile.open(**profile) as dataset:
+        dataset.write(map_data["values"], 1)
+    return memfile.open()  # Return the opened dataset
+
+
+# Example
+def example_run(vlc=3000.0, num_samples=1000):
+    vlc = vlc
+
+    # Example code to run the function
+    # Example station coordinates
+    sta = np.array([[25, 25], [75, 75], [50, 50]])
+
+    # Run the spatial_distance function
+    result = spatial_distance.example_run()
+
+    # Create synthetic seismic signals
+    num_samples = num_samples
+    t = np.linspace(0, 10, num_samples)
+    data = []
+    for i in range(len(sta)):
+        # Different amplitudes for each station
+        signal = norm.pdf(t, 5, 0.5) * (i + 1) * 100
+        noise = np.random.normal(0, 0.1, num_samples)
+        data.append(signal + noise)
+    data = np.array(data)
+
+    # Set parameters for spatial_migrate
+    dt = t[1] - t[0]  # Time step
+
+    # Convert distance maps to MemoryFile objects and open them
+    memory_files = [convert_to_memoryfile(map_data)
+                    for map_data in result["maps"]]
+
+    # Call spatial_migrate function
+    sp_mig = spatial_migrate(
+        data=data,
+        d_stations=result["matrix"],
+        d_map=memory_files,  # Pass the opened MemoryFile objects
+        v=vlc,
+        dt=dt,
+        verbose=True,
+    )
+
+    return sp_mig
+
+
+if __name__ == "__main__":
+    # Set up argument parser
+    parser = argparse.ArgumentParser(
+        description='Spatial Migrate example.')
+    parser.add_argument(
+        '--v',
+        type=float,
+        default=3000.0,
+        help='Mean velocity of seismic waves (m/s)')
+    parser.add_argument(
+        '--n',
+        type=int,
+        default=1000,
+        help='Number of samples')
+
+    # Parse command line arguments
+    args = parser.parse_args()
+    example_run(args.v, args.n)

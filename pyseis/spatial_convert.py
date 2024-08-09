@@ -1,3 +1,4 @@
+import argparse
 import numpy as np
 import rasterio
 from rasterio.warp import transform
@@ -58,3 +59,49 @@ def spatial_convert(data, from_proj, to_proj):
         converted_xs, converted_ys = transform(from_proj, to_proj, xs, ys)
 
     return np.column_stack((converted_xs, converted_ys))
+
+
+if __name__ == "__main__":
+    # Set up argument parser
+    parser = argparse.ArgumentParser(
+        description='Spatial Cconvert example.')
+    parser.add_argument(
+        '--sta-a',
+        type=int,
+        default=25,
+        help='Station coordinate for A')
+    parser.add_argument(
+        '--sta-b',
+        type=int,
+        default=75,
+        help='Station coordinate for B')
+    parser.add_argument(
+        '--sta-c',
+        type=int,
+        default=50,
+        help='Station coordinate for C')
+
+    # Parse command line arguments
+    args = parser.parse_args()
+
+    # Define station coordinates (in the same coordinate system as the DEM)
+    sta = np.array(
+        [[args.sta_a, args.sta_a], [args.sta_b, args.sta_b], [args.sta_c, 90]]
+        )
+    sta_ids = ["A", "B", "C"]
+
+    # Define the input and output projection systems
+    input_proj = "+proj=longlat +datum=WGS84"
+    output_proj = "+proj=utm +zone=32 +datum=WGS84"
+
+    # Convert station coordinates
+    converted_sta = spatial_convert(
+        sta,
+        input_proj,
+        output_proj
+        )
+
+    print("Original station coordinates:")
+    print(sta)
+    print("\nConverted station coordinates:")
+    print(converted_sta)

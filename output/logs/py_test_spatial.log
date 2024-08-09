@@ -25,14 +25,7 @@ Processing map for station 0
 Processing map for station 1
 Processing map for station 2
 Processing station distances
-Data shape: (3, 1000)
-Coupling shape: (3,)
-Number of distance maps: 3
-Shape of first distance map: (100, 100)
-Combined distance map shape: (100, 100, 3)
-AOI mask shape: (100, 100)
-Number of pixels to process: 10000
-e_max_list: [array([ 0.5, 97.5])]
+e_max_list: [array([ 0.5, 29.5])]
 No SNR given. Will be calculated from signals.
 Number of distance maps: 3
 Type of first distance map: <class 'rasterio.io.DatasetReader'>
@@ -40,11 +33,11 @@ Type of first distance map: <class 'rasterio.io.DatasetReader'>
 Clipped migrated data summary:
 Min value: 0.0
 Max value: 1.0
-Mean value: 0.5993486214493154
+Mean value: 0.6176368992343159
 
 Migrated data summary:
-Min value: 0.6476102052458197
-Max value: 0.9997375121515039
-Mean value: 0.9111112549241179
+Min value: 0.5930232967992031
+Max value: 0.9999047615859115
+Mean value: 0.9077884088497993
 Successfully removed synthetic_dem_0.tif
 Script completed.
