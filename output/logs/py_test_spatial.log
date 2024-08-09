@@ -25,7 +25,7 @@ Processing map for station 0
 Processing map for station 1
 Processing map for station 2
 Processing station distances
-e_max_list: [array([ 0.5, 29.5])]
+e_max_list: [array([ 0.5, 21.5])]
 No SNR given. Will be calculated from signals.
 Number of distance maps: 3
 Type of first distance map: <class 'rasterio.io.DatasetReader'>
@@ -33,11 +33,11 @@ Type of first distance map: <class 'rasterio.io.DatasetReader'>
 Clipped migrated data summary:
 Min value: 0.0
 Max value: 1.0
-Mean value: 0.6176368992343159
+Mean value: 0.64619248026885
 
 Migrated data summary:
-Min value: 0.5930232967992031
-Max value: 0.9999047615859115
-Mean value: 0.9077884088497993
+Min value: 0.5991083168867536
+Max value: 0.9999189095784967
+Mean value: 0.8959477970799004
 Successfully removed synthetic_dem_0.tif
 Script completed.
