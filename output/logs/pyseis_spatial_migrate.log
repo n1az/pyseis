@@ -1,0 +1,8 @@
+Processing map for station 0
+Processing map for station 1
+Processing map for station 2
+Processing station distances
+Skipping plot display for Spatial Distance
+No SNR given. Will be calculated from signals.
+Number of distance maps: 3
+Type of first distance map: <class 'rasterio.io.DatasetReader'>

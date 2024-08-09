@@ -1,0 +1,9 @@
+   frequency         power
+0   1.000000  1.600086e-18
+1   1.199199  2.580688e-18
+2   1.398398  3.817189e-18
+3   1.597598  5.307528e-18
+4   1.796797  7.046362e-18
+
+Shape of the result: (1000, 2)
+Skipping Hydraulic Turbulence plot display

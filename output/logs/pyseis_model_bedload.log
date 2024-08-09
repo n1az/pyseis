@@ -1,0 +1,9 @@
+   frequency         power
+0    0.10000  1.971187e-20
+1    0.11992  4.526890e-20
+2    0.13984  9.123866e-20
+3    0.15976  1.671341e-19
+4    0.17968  2.846209e-19
+
+Shape of the result: (1000, 2)
+Skipping Bedload Transport plot display.

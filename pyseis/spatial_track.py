@@ -1,3 +1,4 @@
+import argparse
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.optimize import minimize
@@ -161,9 +162,51 @@ def spatial_track(
 
 # Example usage of the spatial_track function
 if __name__ == "__main__":
+    # Set up argument parser
+    parser = argparse.ArgumentParser(
+        description='Spatial Pmax example.')
+    parser.add_argument(
+        '--num-st',
+        type=int,
+        default=5,
+        help='Size of numpy array')
+    parser.add_argument(
+        '--data-ln',
+        type=int,
+        default=1000,
+        help='Length of the seismic signal data')
+    parser.add_argument(
+        '--s-rate',
+        type=float,
+        default=100.0,
+        help='Sampling rate of the seismic data in Hz')
+    parser.add_argument(
+        '--max-lag',
+        type=float,
+        default=10,
+        help='Maximum time lag to consider in cross-correlation')
+    parser.add_argument(
+        '--t-window',
+        type=float,
+        default=100,
+        help='Time window size in samples')
+    parser.add_argument(
+        '--overlap',
+        type=float,
+        default=50,
+        help='Overlap between consecutive windows in samples')
+    parser.add_argument(
+        '--plot',
+        type=bool,
+        default=False,
+        help='Whether to generate plot output')
+
+    # Parse command line arguments
+    args = parser.parse_args()
+
     # Generate some sample seismic data
-    num_stations = 5
-    data_length = 1000  # Length of the seismic signal data
+    num_stations = args.num_st
+    data_length = args.data_ln
     data = np.random.randn(num_stations, data_length)
 
     # Generate sample coordinates for the seismic stations
@@ -173,10 +216,11 @@ if __name__ == "__main__":
     distance_map = np.random.rand(100, num_stations)
 
     # Set parameters for the function call
-    sampling_rate = 100.0  # Example sampling rate in Hz
-    max_lag = 10  # Maximum lag in samples
-    time_window = 100  # Time window size in samples
-    overlap = 50  # Overlap between consecutive windows in samples
+    sampling_rate = args.s_rate
+    max_lag = args.max_lag
+    time_window = args.t_window
+    overlap = args.overlap
+    plot = args.plot
 
     # Call the spatial_track function with plotting enabled
     results = spatial_track(
@@ -188,7 +232,7 @@ if __name__ == "__main__":
         time_window=time_window,
         overlap=overlap,
         cpu=1,  # Assuming single CPU for simplicity
-        plot=True,
+        plot=plot,
     )
 
     # Print the results

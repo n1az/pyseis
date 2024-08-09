@@ -1,3 +1,4 @@
+import argparse
 import numpy as np
 import rasterio
 from scipy.stats import norm
@@ -134,7 +135,22 @@ def main():
         plot_spatial_amplitude(e, dem_bounds, e_max_list, sta, sta_ids)
 
         # Create synthetic seismic signals
-        num_samples = 1000
+        # Set up argument parser
+        parser = argparse.ArgumentParser(
+            description='Create synthetic seismic signals')
+        parser.add_argument(
+            '--n',
+            type=int,
+            default=1000,
+            help='Number of samples')
+        parser.add_argument(
+            '--v',
+            type=float,
+            default=3000.0,
+            help='Velocity in m/s (float)')
+        # Parse command line arguments
+        args = parser.parse_args()
+        num_samples = args.n
         t = np.linspace(0, 10, num_samples)
         data = []
         for i in range(len(sta)):
@@ -148,7 +164,7 @@ def main():
         save_csv(data.T, "Py_synth_seis_signals.csv", headers=sta_ids)
 
         # Set parameters for spatial_migrate
-        v = 3000.0  # Velocity in m/s (as float)
+        v = args.v
         dt = t[1] - t[0]  # Time step
 
         # Convert distance maps to MemoryFile objects and open them
