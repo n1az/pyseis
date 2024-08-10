@@ -1,3 +1,7 @@
+"""
+    This module contains utility functions, and is not a component.
+"""
+
 import os
 import csv
 

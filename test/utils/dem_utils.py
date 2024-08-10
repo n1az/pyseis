@@ -1,3 +1,7 @@
+"""
+    This module contains utility functions, and is not a component.
+"""
+
 import numpy as np
 import rasterio
 from rasterio.transform import from_origin

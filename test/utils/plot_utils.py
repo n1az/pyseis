@@ -1,5 +1,9 @@
+"""
+    This module contains utility functions, and is not a component.
+"""
+
 import matplotlib.pyplot as plt
-from utils import save_plot
+from utils.file_utils import save_plot
 
 
 def plot_spectra(ref_spectra):
