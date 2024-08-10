@@ -1,3 +1,7 @@
+"""
+    This module contains utility functions, and is not a component.
+"""
+
 import numpy as np
 from pyseis import (
     fmi_parameters,
