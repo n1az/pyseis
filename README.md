@@ -8,7 +8,7 @@
   <a href="#book-documentation">Documentation</a> &#xa0; | &#xa0;
   <a href="#memo-license">License</a> &#xa0; | &#xa0;
   <a href="#black_nib-citation">Citation</a> &#xa0; | &#xa0;
-  <a href="#notebook_with_decorative_cover-contributing-to-pyseis">Contributing</a> &#xa0; | &#xa0;
+  <a href="#notebook_with_decorative_cover-contributing-to-pyseis">Contributing</a> &#xa0;
 </p>
 
 
